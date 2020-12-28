@@ -1,0 +1,4 @@
+<Bug Fix>
+
+* Remove Frozen Lava. 
+not Board:IsTerrain(curr,TERRAIN_LAVA)
