@@ -87,14 +87,14 @@ function nard_frostMoaun:GetSkillEffect(p1, p2) --스킬 이펙트 부분.
 	
 
 		 
-	local exploding = Board:IsPawnSpace(p2) and (Board:GetTerrain(p2) == TERRAIN_ICE)
+	--local exploding = Board:IsPawnSpace(p2) and (Board:GetTerrain(p2) == TERRAIN_ICE)
 
 	local damage = SpaceDamage(p2,self.MinDamage, ((dir-1)%4)*self.Push)
 	--damage.sAnimation = "explopunch1_"..((dir-1)%4)
 	damage.sAnimation =  "gaia_zeta_iceblast_"..((dir-1)%4)
 	
-	
-	if exploding then
+	-- if exploding then 
+	if (Board:GetTerrain(p2) == TERRAIN_ICE) then
 		damage.iDamage = damage.iDamage + self.IceDamage
 	end
 
@@ -124,7 +124,8 @@ function nard_frostMoaun:GetSkillEffect(p1, p2) --스킬 이펙트 부분.
 	
 	local damage2 = SpaceDamage(p2 + DIR_VECTORS[((dir+1)%4)], self.MinDamage ,  ((dir+1)%4) )  -- SpaceDamage(curr, 0 ,  ((dir+1)%4) ) 
 
-	if Board:IsPawnSpace(p2 + DIR_VECTORS[((dir+1)%4)]) and (Board:GetTerrain(p2 + DIR_VECTORS[((dir+1)%4)]) == TERRAIN_ICE) then
+	--  Board:IsPawnSpace(p2 + DIR_VECTORS[((dir+1)%4)]) and 
+	if (Board:GetTerrain(p2 + DIR_VECTORS[((dir+1)%4)]) == TERRAIN_ICE) then
 		damage2.iDamage = damage2.iDamage + self.IceDamage
 	end 
 
