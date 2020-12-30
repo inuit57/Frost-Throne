@@ -16,8 +16,8 @@ local function init(self)
 		-- },
 		{
 			Type = "mech",
-			Name = "IceMech",
-			Filename = "mech_ice",
+			Name = "FrostMech",
+			Filename = "mech_frost",
 			Path = "img", 
 			ResourcePath = "units/player",
 
