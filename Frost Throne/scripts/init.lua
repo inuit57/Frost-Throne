@@ -26,11 +26,20 @@ local function init(self)
 			Broken =            {  PosX = -22, PosY = -7},
 			Submerged =         { PosX = -22, PosY = -1 },
 			SubmergedBroken =   {  PosX = -22, PosY = -1 },
-			-- Default =           { PosX = -20, PosY = -8 },
-			-- Animated =          { PosX = -20, PosY = -8 , NumFrames = 4},  -- 이거가 행거에서 보이는 위치 
-			-- Broken =            { PosX = -20, PosY = -8},
-			-- Submerged =         { PosX = -25, PosY = -6 },
-			-- SubmergedBroken =   { PosX = -25, PosY = -6 },
+			Icon =              {},
+		},
+		{
+			Type = "mech",
+			Name = "DrakoMech",
+			Filename = "mech_icejet",
+			Path = "img", 
+			ResourcePath = "units/player",
+
+			Default =           {  PosX = -22, PosY = -5 },
+			Animated =          {  PosX = -22, PosY = -5 , NumFrames = 4},  -- 이거가 행거에서 보이는 위치 
+			Broken =            {  PosX = -17, PosY = 5},
+			Submerged =         { PosX = -17, PosY = 10 },
+			SubmergedBroken =   {  PosX = -17, PosY = 12 },
 			Icon =              {},
 		},
 		-- {
