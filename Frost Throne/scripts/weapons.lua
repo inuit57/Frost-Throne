@@ -18,8 +18,9 @@ local function isTipImage()
 end
 
 nard_frostMoaun = Skill:new{
-	Name = "FrostFist",
-	Description = "Punch an adjacent tiles, pushing them to the left and right. More Damage to units on the Ice Tile.",-- \n\n (Full Upgrade Bonus :\n ???) ", 
+	Name = "Frost Hammer",
+	Description = "Damage 2 adjacent tiles, pushing them apart and creating Ice tiles. Deals more damage to Ice tiles.",
+	--Description = "Punch an adjacent tiles, pushing them to the left and right. More Damage to units on the Ice Tile.",-- \n\n (Full Upgrade Bonus :\n ???) ", 
 	--"Push target tile and Make tiles to Ice. More Damage to units that already on Ice Tile. \n\n (Full Upgrade Bonus :\n ???)", 
 	Class = "Prime", 
 	Icon = "weapons/IcePunch.png", 
@@ -141,14 +142,14 @@ function nard_frostMoaun:GetSkillEffect(p1, p2) --스킬 이펙트 부분.
 end
 
 nard_frostMoaun_A = nard_frostMoaun:new{ --
-	UpgradeDescription = "Increases Minimum Damage by 1.",
+	UpgradeDescription = "Increases minimum damage by 1.",
 	--Damage =4, 
 	MinDamage = 2,
 	IceDamage = 1,  
 }
 
 nard_frostMoaun_B = nard_frostMoaun:new{ --
-	UpgradeDescription = "Increases Maximum Damage by 1.",
+	UpgradeDescription = "Increases max damage by 1.",
 	Damage = 4,
 	IceDamage = 3, 
 	
@@ -167,7 +168,8 @@ nard_frostMoaun_AB = nard_frostMoaun:new{ --세번째 업그레이드를 적용�
 
 nard_Iceball  = Ranged_BackShot:new {-- LineArtillery:new{
 	Name = "Icycle Launcher",
-	Description = "Deals damage and makes ice to two tiles, pushing one left and one right.More Damage to units on the Ice Tile.",
+	Description = "Artillery that creates 2 Ice tiles, pushing one left and one right. Deals more damage to Ice tiles.",
+	--Description = "Deals damage and makes ice to two tiles, pushing one left and one right.More Damage to units on the Ice Tile.",
 	Class = "Ranged",
 	Icon = "weapons/iceShot.png",
 	Sound = "",
@@ -316,14 +318,14 @@ end
 
 nard_Iceball_A = nard_Iceball:new{
 	--Sides = true,
-	UpgradeDescription = "Increases Min Damage by 1.",--"Building Immune",
+	UpgradeDescription = "Increases minimum damage by 1.",--"Building Immune",
 	MinDamage = 1,
 	
 } 
 
 nard_Iceball_B = nard_Iceball:new{
 	
-	UpgradeDescription = "Increases Max Damage by 1.",
+	UpgradeDescription = "Increases max damage by 1.",
 	Damage = 3,
 	
 } 
@@ -335,8 +337,8 @@ nard_Iceball_AB = nard_Iceball:new{
 } 
 
 nard_DragonFire = Skill:new{
-	Name = "Frost-Bombs",
-	Description =  "Fly over a target,  flipping its attack direction and make Ice tile.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
+	Name = "Frost Bombs",
+	Description =  "Fly over targets, flipping their attack direction and creating Ice tiles.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
 	Class = "Science",
 	Icon =  "weapons/iceBomb.png",
 	Rarity = 3,
@@ -487,7 +489,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 end
 
 nard_DragonFire_A = nard_DragonFire:new{
-	UpgradeDescription = "Allows jumping over and attacking an additional targets.",
+	UpgradeDescription = "Allows jumping over any number of additional targets.",
 	Range = 7 , 
 	--AttackAnimation = "ExploRaining2",
 
@@ -506,7 +508,7 @@ nard_DragonFire_A = nard_DragonFire:new{
 }
 
 nard_DragonFire_B = nard_DragonFire:new{
-	UpgradeDescription = "pushing adjacent tiles away.",
+	UpgradeDescription = "Push tiles on either side when jumping.",
 	SidePush = 1, 
 	TipImage = {
 		Unit = Point(2,3),
@@ -539,8 +541,10 @@ nard_DragonFire_AB = nard_DragonFire:new{
 
 
 nard_PhaseShield =  Skill:new{
-	Name = "Phase Frost",
-	Description =  "Shoot a projectile that phases through objects and Freeze to buildings it passes through." , -- \n\n (Full Upgrade Bonus :\n ???)", 
+	Name = "Cryo-Phaser",
+	--Name = "Phase Frost",
+	Description =  "Shoot a projectile that phases through allies and Buildings. Buildings are Frozen.",
+	--Description =  "Shoot a projectile that phases through objects and Freeze to buildings it passes through." , -- \n\n (Full Upgrade Bonus :\n ???)", 
 	Class = "Science",
 	Icon = "weapons/phaseFrost.png",
 	Explosion = "",
@@ -728,7 +732,7 @@ end
 
 
 nard_PhaseShield_A = nard_PhaseShield:new{
-	UpgradeDescription =  " ",
+	UpgradeDescription =  "Applies a Shield to allies it passes through.",
 	AllyShield = true, 
 	--UpgradeDescription = "Allows fire additional projectile in your left directions. But decrease use conut.",
 	--LeftShot = 1,
@@ -737,7 +741,7 @@ nard_PhaseShield_A = nard_PhaseShield:new{
 }
 
 nard_PhaseShield_B = nard_PhaseShield:new{
-	UpgradeDescription =  " ",
+	UpgradeDescription =  "The projectile phases through all obstacles.",
 	Full_Phase = true, 
 	--UpgradeDescription = "Allows fire additional projectile in your right directions. But decrease use conut. ",
 	--RightShot = 1,
