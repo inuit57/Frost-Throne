@@ -6,10 +6,10 @@ local wt2 = {
 	nard_Iceball_Upgrade2 = "+1 Max Damage",
 	
 	nard_DragonFire_Upgrade1 = "+4 Range",
-	nard_DragonFire_Upgrade2 = "SidePush",
+	nard_DragonFire_Upgrade2 = "Side Push",
 	
-	nard_PhaseShield_Upgrade1 = "+ Ally Shield",
-	nard_PhaseShield_Upgrade2 = "+ Full Phase",
+	nard_PhaseShield_Upgrade1 = "Shield Allies",
+	nard_PhaseShield_Upgrade2 = "Full Phase",
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
 
