@@ -678,7 +678,7 @@ nard_PhaseShield_A = nard_PhaseShield:new{
 nard_PhaseShield_B = nard_PhaseShield:new{
 	--UpgradeDescription =  "The projectile phases through all obstacles.",
 	UpgradeDescription =  "The projectile range has been extended by 4.",
-	Range = 8, 
+	Range = 4, 
 	--Full_Phase = true, 
 	
 	--UpgradeDescription = "Allows fire additional projectile in your right directions. But decrease use conut. ",
