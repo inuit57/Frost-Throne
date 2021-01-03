@@ -42,6 +42,20 @@ local function init(self)
 			SubmergedBroken =   {  PosX = -17, PosY = 12 },
 			Icon =              {},
 		},
+		{
+			Type = "mech",
+			Name = "IcycleMech",
+			Filename = "mech_iceartillery",
+			Path = "img", 
+			ResourcePath = "units/player",
+
+			Default =           {  PosX = -17, PosY = -1 },
+			Animated =          {  PosX = -17, PosY = -1 , NumFrames = 4},  -- 이거가 행거에서 보이는 위치 
+			Broken =            {  PosX = -17, PosY = -1},
+			Submerged =         { PosX = -17, PosY = 5 },
+			SubmergedBroken =   {  PosX = -17, PosY = 5 },
+			Icon =              {},
+		},
 		-- {
 		-- 	Type = "mech",
 		-- 	Name = "StealthMech",
