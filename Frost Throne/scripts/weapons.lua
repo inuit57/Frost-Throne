@@ -85,11 +85,8 @@ function nard_frostMoaun:GetSkillEffect(p1, p2) --스킬 이펙트 부분.
 	local ret = SkillEffect()
 	local dir = GetDirection(p2 - p1)
 	local distance = p1:Manhattan(p2)
-	
-
-		 
+			 
 	--local exploding = Board:IsPawnSpace(p2) and (Board:GetTerrain(p2) == TERRAIN_ICE)
-
 	local damage = SpaceDamage(p2,self.MinDamage, ((dir-1)%4)*self.Push)
 	--damage.sAnimation = "explopunch1_"..((dir-1)%4)
 	damage.sAnimation =  "gaia_zeta_iceblast_"..((dir-1)%4)
@@ -168,7 +165,8 @@ nard_frostMoaun_AB = nard_frostMoaun:new{ --세번째 업그레이드를 적용�
 
 nard_Iceball  = Ranged_BackShot:new {-- LineArtillery:new{
 	Name = "Icycle Launcher",
-	Description = "Artillery that creates 2 Ice tiles, pushing one left and one right. Deals more damage to Ice tiles.",
+	--Description = "Artillery that creates 2 Ice tiles, pushing one left and one right. Deals more damage to Ice tiles.",
+	Description = "Artillery that creates 2 Ice tiles, pushing back/forward.  Deals more damage to Ice tiles.",
 	--Description = "Deals damage and makes ice to two tiles, pushing one left and one right.More Damage to units on the Ice Tile.",
 	Class = "Ranged",
 	Icon = "weapons/iceShot.png",
@@ -262,8 +260,12 @@ function nard_Iceball:GetSkillEffect(p1,p2)
 	end
 
 
-	local damage = SpaceDamage(p2,p2dam,(dir+1)%4)
-	damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
+	-- local damage = SpaceDamage(p2,p2dam,(dir+1)%4)
+	-- damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
+	
+	local damage = SpaceDamage(p2,p2dam,(dir+2)%4)
+	damage.sAnimation = "gaia_zeta_iceblast_"..(dir+2)%4
+	
 	
 	if Board:GetTerrain(p2) ~= TERRAIN_ICE then 
 		--IceDamage = 0  
@@ -286,7 +288,8 @@ function nard_Iceball:GetSkillEffect(p1,p2)
 	ret:AddDamage(damage)
 
 
-	damage = SpaceDamage(p3,p3dam,(dir-1)%4)
+	-- damage = SpaceDamage(p3,p3dam,(dir-1)%4)
+	damage = SpaceDamage(p3,p3dam,(dir)%4)
 
 	if Board:GetTerrain(p3) ~= TERRAIN_ICE then 
 		--IceDamage = 0  
@@ -306,7 +309,8 @@ function nard_Iceball:GetSkillEffect(p1,p2)
 	end
 
 	damage.bHidePath = true
-	damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4
+	-- damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4
+	damage.sAnimation = "gaia_zeta_iceblast_"..(dir)%4
 	--ret:AddArtillery(damage,self.UpShot2)
 	ret:AddDamage(damage)
 
@@ -335,6 +339,8 @@ nard_Iceball_AB = nard_Iceball:new{
 	MinDamage = 1,
 	Damage = 3,	
 } 
+
+
 
 nard_DragonFire = Skill:new{
 	Name = "Frost Bombs",
