@@ -9,7 +9,7 @@ local wt2 = {
 	nard_DragonFire_Upgrade2 = "Side Push",
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
-	nard_PhaseShield_Upgrade2 = "Full Phase",
+	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
 
@@ -436,12 +436,6 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		damage.sSound = self.BombSound
 		
 		local spaceDamage3 = SpaceDamage(curr, 0) 
-		-- if (curr ~= p2) and ( self.Full_Upgrade == 1 ) and ( Board:GetTerrain(curr) == TERRAIN_WATER ) then
-		-- 	damage.iFrozen = EFFECT_CREATE
-		-- 	-- 적이 얼어있는 경우, 즉시 처치하는 기믹을 넣어볼까.
-		
-		-- else
-
 		
 		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then
 
@@ -542,8 +536,8 @@ nard_DragonFire_AB = nard_DragonFire:new{
 
 nard_PhaseShield =  Skill:new{
 	Name = "Cryo-Phaser",
-	--Name = "Phase Frost",
-	Description =  "Shoot a projectile that phases through allies and Buildings. Buildings are Frozen.",
+	--Description =  "Shoot a projectile that phases through allies and Buildings. Buildings are Frozen.",
+	Description =  "Shoot a projectile that phases through all obstacles. Buildings are Frozen.",
 	--Description =  "Shoot a projectile that phases through objects and Freeze to buildings it passes through." , -- \n\n (Full Upgrade Bonus :\n ???)", 
 	Class = "Science",
 	Icon = "weapons/phaseFrost.png",
@@ -554,12 +548,13 @@ nard_PhaseShield =  Skill:new{
 	Damage = 0,
 	Push = 0,
 	PowerCost = 1,
+	Range = 2, 
 	Upgrades = 2,
 	Limited = 2,
 	Phase = true,
 
 	AllyShield = false, 
-	Full_Phase = false, 
+	Full_Phase = true, -- false, 
 
 	--PhaseShield = true,
 	SelfDamage = 0, 
@@ -587,7 +582,7 @@ function nard_PhaseShield:GetTargetArea(p1)
 		local ret = PointList()
 	
 		for dir = DIR_START, DIR_END do
-			for i = 1, 8 do
+			for i = 1, self.Range do
 				local curr = Point(p1 + DIR_VECTORS[dir] * i)
 				if not Board:IsValid(curr) then
 					break
@@ -612,23 +607,19 @@ function nard_PhaseShield:GetSkillEffect(p1,p2)
 
 	local pathing = self.Phase and PATH_PHASING or PATH_PROJECTILE
 	local target = GetProjectileEnd(p1,p2,pathing)  
-	--[[
-	local rightdir = (dir+1)%4
-	local target_r = GetProjectileEnd(p1,p1 + DIR_VECTORS[rightdir] ,PATH_PHASING)
-	
-	local leftdir = (dir-1)%4
-	local target_l = GetProjectileEnd(p1,p1 + DIR_VECTORS[leftdir], PATH_PHASING)
-	]]
-	local selfDam = SpaceDamage(p1, self.SelfDamage)
-	ret:AddDamage(selfDam)
 
+	
 	if self.Full_Phase then
 		target = p1 
-		while Board:IsValid(target) do
+		--while Board:IsValid(target) do
+		for i=1, self.Range do 
 			target = target + DIR_VECTORS[dir]
+			if not Board:IsValid(target) then 
+				target = target - DIR_VECTORS[dir]
+				break
+			end
 		end
-
-		target = target - DIR_VECTORS[dir] 
+		--target = target - DIR_VECTORS[dir] -- (n-1 ). 
 	end
 	
 	local damage = SpaceDamage(target, self.Damage)
@@ -644,62 +635,6 @@ function nard_PhaseShield:GetSkillEffect(p1,p2)
 	end
 	
 	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
-	
-	--ret.path = Board:GetSimplePath(p1, target)
-	--[[
-	if self.LeftShot then -- left 
-		if target_l ~= p1 then
-			damage = SpaceDamage(target_l, self.Damage)
-			damage.sAnimation = self.Explo..leftdir
-	
-			ret:AddProjectile(damage,self.ProjectileArt, NO_DELAY)
-		end
-	
-		
-		local temp = p1 + DIR_VECTORS[leftdir]
-		while true do
-			if Board:IsBuilding(temp) then -- or (Board:GetPawnTeam(temp) == TEAM_PLAYER) then
-				damage = SpaceDamage(temp, 0)
-				--damage.iShield = 1
-				damage.iFrozen = 1
-				ret:AddDamage(damage)
-			end
-		
-			if temp == target_l then
-				break
-			end
-			
-			temp = temp + DIR_VECTORS[leftdir]
-		end
-
-	end
-	
-	if self.RightShot then -- right
-		if target_r ~= p1 then
-			damage = SpaceDamage(target_r, self.Damage)
-			damage.sAnimation = self.Explo..rightdir
-			ret:AddProjectile(damage,self.ProjectileArt, NO_DELAY)
-		end
-		
-		local temp = p1 + DIR_VECTORS[rightdir]
-		while true do
-			if Board:IsBuilding(temp) then -- or (Board:GetPawnTeam(temp) == TEAM_PLAYER) then
-				damage = SpaceDamage(temp, 0)
-				--damage.iShield = 1
-				damage.iFrozen = 1
-				ret:AddDamage(damage)
-			end
-		
-			if temp == target_r then
-				break
-			end
-			
-			temp = temp + DIR_VECTORS[rightdir]
-		end
-	end
-	]]
-	
-
 
 	local temp = p1 + DIR_VECTORS[dir]
 	while true do
@@ -741,8 +676,11 @@ nard_PhaseShield_A = nard_PhaseShield:new{
 }
 
 nard_PhaseShield_B = nard_PhaseShield:new{
-	UpgradeDescription =  "The projectile phases through all obstacles.",
-	Full_Phase = true, 
+	--UpgradeDescription =  "The projectile phases through all obstacles.",
+	UpgradeDescription =  "The projectile range has been extended by 4.",
+	Range = 8, 
+	--Full_Phase = true, 
+	
 	--UpgradeDescription = "Allows fire additional projectile in your right directions. But decrease use conut. ",
 	--RightShot = 1,
 	--Limited = 1, 
@@ -753,7 +691,8 @@ nard_PhaseShield_AB = nard_PhaseShield:new{
 	--LeftShot = 1,
 	--RightShot = 1,
 	AllyShield = true,
-	Full_Phase = true, 
+	Range = 4, 
+	--Full_Phase = true, 
 
 	--Limited = 0, -- 2 ,  --full upgrade bonus
 	--SelfDamage = 1, -- full upgrade bonus 

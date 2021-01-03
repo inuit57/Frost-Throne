@@ -20,7 +20,7 @@ AddPawn("narD_FrostMech")
 narD_DrakoMech = Pawn:new  {
 	Name = "Drako Mech",
 	Class = "Science", --Brute
-	Health = 2,
+	Health = 3,
 	Image = "DrakoMech",
 	ImageOffset = 6,
 	MoveSpeed = 4,
@@ -37,7 +37,7 @@ AddPawn("narD_DrakoMech")
 narD_IcicleMech = Pawn:new {
 	Name = "Icicle Mech",
 	Class = "Ranged",
-	Health = 2,
+	Health = 3,
 	Image = "MechIgnite",
 	ImageOffset = 6,
 	Flying = true,
