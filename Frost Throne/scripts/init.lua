@@ -93,6 +93,10 @@ local function init(self)
 
 
 	modApi:appendAsset("img/weapons/IcePunch.png",self.resourcePath.."img/weapons/IcePunch.png")
+	
+	modApi:appendAsset("img/weapons/frost_warhammer.png",self.resourcePath.."img/weapons/frost_warhammer.png")
+	modApi:appendAsset("img/weapons/frost_range.png",self.resourcePath.."img/weapons/frost_range.png")
+
 	modApi:appendAsset("img/weapons/iceBomb.png",self.resourcePath.."img/weapons/iceBomb.png")
 	modApi:appendAsset("img/weapons/iceShot.png",self.resourcePath.."img/weapons/iceShot.png")
 	modApi:appendAsset("img/weapons/phaseFrost.png",self.resourcePath.."img/weapons/phaseFrost.png")
