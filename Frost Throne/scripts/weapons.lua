@@ -5,8 +5,8 @@ local wt2 = {
 	nard_Iceball_Upgrade1 = "+1 Min Damage",--"Building Immune", --"+2 Center Damage",
 	nard_Iceball_Upgrade2 = "+1 Max Damage",
 	
-	nard_DragonFire_Upgrade1 = "+4 Range",
-	nard_DragonFire_Upgrade2 = "Side Push",
+	nard_DragonFire_Upgrade1 = "+2 Range", --"+4 Range"
+	nard_DragonFire_Upgrade2 =  "+2 Range", --"Side Push",
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
@@ -344,7 +344,7 @@ nard_Iceball_AB = nard_Iceball:new{
 
 nard_DragonFire = Skill:new{
 	Name = "Frost Bombs",
-	Description =  "Fly over targets, flipping their attack direction and creating Ice tiles.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
+	Description =  "Fly over targets, flipping their attack direction and creating Ice tiles. And Push tiles on either side when jumping.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
 	Class = "Science",
 	Icon =  "weapons/iceBomb.png",
 	Rarity = 3,
@@ -356,7 +356,7 @@ nard_DragonFire = Skill:new{
 	Damage2 = 0,
 	AnimDelay = 0.2,
 	
-	SidePush = 0, 
+	SidePush = true, 
 	Full_Upgrade = 0, 
 	
 	PowerCost = 1,
@@ -368,14 +368,25 @@ nard_DragonFire = Skill:new{
 
 	CustomTipImage = "MyWeaponTip",
 
+	-- TipImage = {
+	-- 	Unit = Point(2,4),
+	-- 	Enemy = Point(2,3),
+	-- 	Enemy2 = Point(2,2),
+	-- 	Target = Point(2,1),
+	-- 	CustomEnemy = "Firefly2", --"Scorpion2",
+	-- 	Building = Point(4,2),
+	-- 	Length = 4,
+	-- }
 	TipImage = {
 		Unit = Point(2,4),
 		Enemy = Point(2,3),
 		Enemy2 = Point(2,2),
+		Enemy3 = Point(3,3),
 		Target = Point(2,1),
 		CustomEnemy = "Firefly2", --"Scorpion2",
 		Building = Point(4,2),
 		Length = 4,
+			
 	}
 
 }
@@ -464,7 +475,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		ret:AddDamage(damage)
 		ret:AddBounce(curr,3)
 		
-		if self.SidePush == 1 then
+		if self.SidePush  then
 			local damage2 = SpaceDamage(curr + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
 			damage2.sAnimation =  "exploout0_"..(dir+1)%4  --"gaia_zeta_iceblast_"..((dir+1)%4)--
 			ret:AddDamage(damage2)
@@ -490,41 +501,42 @@ end
 
 nard_DragonFire_A = nard_DragonFire:new{
 	UpgradeDescription = "Allows jumping over any number of additional targets.",
-	Range = 7 , 
+	Range = 5 , --7, 
 	--AttackAnimation = "ExploRaining2",
 
 	CustomTipImage = "MyWeaponTip",
-	TipImage = {
-		Unit = Point(2,5),
-		Enemy = Point(2,4),
-		--Enemy2 = Point(2,4),
-		Enemy3 = Point(2,3),
-		Enemy4 = Point(2,2),
-		Enemy5 = Point(2,1),
-		Target = Point(2,0),
-		CustomEnemy = "Scorpion2",
-		--Length = 4,
-	}
+	-- TipImage = {
+	-- 	Unit = Point(2,5),
+	-- 	Enemy = Point(2,4),
+	-- 	--Enemy2 = Point(2,4),
+	-- 	Enemy3 = Point(2,3),
+	-- 	Enemy4 = Point(2,2),
+	-- 	Enemy5 = Point(2,1),
+	-- 	Target = Point(2,0),
+	-- 	CustomEnemy = "Scorpion2",
+	-- 	--Length = 4,
+	-- }
 }
 
 nard_DragonFire_B = nard_DragonFire:new{
-	UpgradeDescription = "Push tiles on either side when jumping.",
-	SidePush = 1, 
-	TipImage = {
-		Unit = Point(2,3),
-		Enemy = Point(1,2),
-		Enemy2 = Point(3,2),
-		Enemy3 = Point(3,3),
-		Enemy4 = Point(1,0),
-		Target = Point(2,0)
-	}
+	--UpgradeDescription = "Push tiles on either side when jumping.",
+	UpgradeDescription = "Allows jumping over any number of additional targets.",
+	--SidePush = 1, 
+	Range = 5 , 
+	-- TipImage = {
+	-- 	Unit = Point(2,3),
+	-- 	Enemy = Point(1,2),
+	-- 	Enemy2 = Point(3,2),
+	-- 	Enemy3 = Point(3,3),
+	-- 	Enemy4 = Point(1,0),
+	-- 	Target = Point(2,0)
+	-- }
 }
 
 nard_DragonFire_AB = nard_DragonFire:new{
 	Range = 7 ,  -- 
-	SidePush = 1 ,
-	--Full_Upgrade =1 , 
-	--AttackAnimation = "ExploRaining2",
+	--SidePush = 1 ,
+	
 	CustomTipImage = "MyWeaponTip",
 	TipImage = {
 		Unit = Point(2,3),
