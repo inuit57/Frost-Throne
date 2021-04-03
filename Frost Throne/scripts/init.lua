@@ -114,7 +114,7 @@ end
 local function load(self,options,version)
 
 	--assert(package.loadlib(self.resourcePath .."/lib/utils.dll", "luaopen_utils"))()
-	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Tip) Ice + Fire = Water ",self.resourcePath.."/mod_icon.png")
+	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Tip) Ice + Fire = Water ",self.resourcePath.."/squad_icon.png")
 
 --modApi:addNextTurnHook(function()
 	--DelayHeal:DelayRepair()
