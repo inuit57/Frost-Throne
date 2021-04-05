@@ -10,12 +10,189 @@ local wt2 = {
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
+
+	-- rework 
+	nard_frostHammer_Upgrade1 = "+ Building Freeze",
+	nard_frostHammer_Upgrade2 = "+1 Damage",
+
+
+
+	narD_SidePushShot_Upgrade1 = "tosx's LOVE" ,
+	narD_SidePushShot_Upgrade2 = "Lemon Heart" ,
+
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
 
 local function isTipImage()
 	return Board:GetSize() == Point(6,6)
 end
+
+
+--Rework Prime Weapon 
+nard_frostHammer = Skill:new{  
+	Name = "Frost Hammer"; 
+	Description = "" ; 
+	Class = "Prime",
+	Icon = "weapons/frost_warhammer.png", 
+	PathSize = 1,
+	MinDamage =1,
+	Damage = 2,
+	PowerCost = 1,
+	Upgrades = 2,
+	UpgradeCost = { 2,3 },
+	BuildingFreeze = 0, 
+	--Limited = 1,
+	LaunchSound = "/weapons/mercury_fist",
+	TipImage = {
+		Unit = Point(2,3),
+		Enemy = Point(2,2),
+		Enemy2 = Point(3,2),
+		Target = Point(2,2)
+	}
+}
+
+function nard_frostHammer:GetSkillEffect(p1, p2)
+	local ret = SkillEffect()
+	local direction = GetDirection(p2 - p1)
+	
+	ret:AddDamage(SoundEffect(p2,self.LaunchSound))
+	
+	damage = SpaceDamage(p2, 0) --  self.Damage)
+	
+	if Board:IsBuilding(p2) and self.BuildingFreeze then 
+		damage.iFrozen = 1; 
+	end
+
+	if not Board:IsTerrain(p2,TERRAIN_LAVA) and Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2) and Board:GetTerrain(p2) ~= TERRAIN_ICE then	
+		damage.iTerrain = TERRAIN_ICE
+		if Board:IsFire(p2) then
+			damage.iTerrain = TERRAIN_WATER
+		end
+	end
+	ret:AddDamage(damage)
+
+	damage = SpaceDamage(p2, self.MinDamage) --  self.Damage)
+	damage.sAnimation = "explosmash_"..direction
+	ret:AddDamage(damage)
+	
+	ret:AddDelay(0.1)
+	ret:AddBounce(p2,3)
+	ret:AddDelay(0.2)
+	
+	local damage = SpaceDamage(p2 + DIR_VECTORS[direction], self.Damage, direction)
+	damage.sAnimation = "gaia_zeta_iceblast_"..direction
+
+	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze then 
+		damage.iDamage = 0 ;
+		damage.iFrozen = 1; 
+	end
+
+	ret:AddDamage(damage)
+	
+	return ret
+end	
+
+nard_frostHammer_A = nard_frostHammer:new{
+	--Limited = 2,
+	UpgradeDescription = "Now Buildings are Frozen.",
+	BuildingFreeze = 1, 
+}
+
+nard_frostHammer_B = nard_frostHammer:new{
+	UpgradeDescription = "Increases damage by 1.",
+	MinDamage = 3,
+	Damage = 4,
+}
+
+nard_frostHammer_AB = nard_frostHammer:new{
+	BuildingFreeze = 1, 
+	MinDamage = 3,
+	Damage = 4,
+}
+--Rework Prime Weapon END 
+
+--Rework Brute Weapon 
+narD_SidePushShot = TankDefault:new{  
+	Name = "SidePush Cannon",
+	Description = "" , 
+	Class = "Ranged", --"Brute",
+	Icon = "weapons/frost_range.png", 
+	Damage = 1,
+	PowerCost = 1,
+	--Phase = true,
+	Upgrades = 2,
+	UpgradeCost = { 2,3 },
+	BuildingFreeze = 0, 
+	--Limited = 1,
+	ProjectileArt = "effects/shot_phaseshot", 
+	LaunchSound = "/weapons/phase_shot",
+	TipImage = {
+		Unit = Point(2,3),
+		Enemy = Point(2,2),
+		Enemy2 = Point(3,2),
+		Enemy3 = Point(3,3),
+		Enemy4 = Point(1,0),
+		Target = Point(2,0),
+
+		CustomEnemy = "Scorpion2",
+	}
+}
+
+function narD_SidePushShot:GetSkillEffect(p1,p2)
+	local ret = SkillEffect()
+	local dir = GetDirection(p2 - p1)
+	
+	local target = GetProjectileEnd(p1,p2,pathing)  
+
+	local damage = SpaceDamage(target, self.Damage)
+	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
+	
+
+	local distance = p1:Manhattan(target)  --target
+
+	for i = 1, distance do
+		ret:AddDelay(0.06)
+		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
+		local curr = p1 + DIR_VECTORS[dir]*i
+		local damage = SpaceDamage( curr , 0 )  
+
+		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
+			damage.iTerrain = TERRAIN_ICE
+			if Board:IsFire(curr) then
+				damage.iTerrain = TERRAIN_WATER
+			end
+		end
+		ret:AddDamage(damage)
+
+
+		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
+		damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
+		ret:AddDamage(damage)
+		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir-1)%4], 0, (dir-1)%4)
+		damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4 -- exploout0_
+		ret:AddDamage(damage)
+	end
+
+	return ret
+	
+end
+
+narD_SidePushShot_A = narD_SidePushShot:new{
+	--Limited = 2,
+	UpgradeDescription = "Increases damage by 1.",
+	
+}
+
+narD_SidePushShot_B = narD_SidePushShot:new{
+	UpgradeDescription = "Increases damage by 1.",
+	
+}
+
+narD_SidePushShot_AB = narD_SidePushShot:new{
+	
+}
+
+
 
 nard_frostMoaun = Skill:new{
 	Name = "Frost Hammer",
@@ -157,8 +334,7 @@ nard_frostMoaun_AB = nard_frostMoaun:new{ --세번째 업그레이드를 적용�
 	IceDamage = 2,
 	MinDamage = 2 , 
 	
-	-- fully Upgrade Bonus?? 
-	--Full_Upgrade = 1 ,
+
 }
 
 ----
