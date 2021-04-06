@@ -8,7 +8,7 @@ narD_FrostMech = Pawn:new {
 	MoveSpeed = 3,  
 	Image = "FrostMech", --"MechPunch", 
 	ImageOffset = 6,
-	SkillList = { "nard_frostMoaun"} ,-- , "Prime_RightHook"}, --  
+	SkillList = { "nard_frostHammer"},-- "nard_frostMoaun"} ,-- , "Prime_RightHook"}, --  
 	SoundLocation = "/mech/prime/punch_mech/",
 	DefaultTeam = TEAM_PLAYER,
 	ImpactMaterial = IMPACT_METAL,
@@ -19,7 +19,7 @@ AddPawn("narD_FrostMech")
 
 narD_DrakoMech = Pawn:new  {
 	Name = "Drako Mech",
-	Class = "Science", --Brute
+	Class = "Brute", --Brute
 	Health = 2,
 	Image = "DrakoMech",
 	ImageOffset = 6,
@@ -36,14 +36,14 @@ AddPawn("narD_DrakoMech")
 
 narD_IcicleMech = Pawn:new {
 	Name = "Icicle Mech",
-	Class = "Ranged",
+	Class = "Science", --"Science",--"Ranged",
 	Health = 3,
 	Image = "IcycleMech",
 	ImageOffset = 6,
 	Flying = true,
 	MoveSpeed = 3,
 	Flying = false,
-	SkillList = { "nard_Iceball"  },
+	SkillList = { "narD_SidePushShot" },--, "nard_Iceball"  },
 	SoundLocation = "/mech/science/science_mech/",
 	DefaultTeam = TEAM_PLAYER,
 	ImpactMaterial = IMPACT_METAL,

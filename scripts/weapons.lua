@@ -5,11 +5,19 @@ local wt2 = {
 	nard_Iceball_Upgrade1 = "+1 Min Damage",--"Building Immune", --"+2 Center Damage",
 	nard_Iceball_Upgrade2 = "+1 Max Damage",
 	
-	nard_DragonFire_Upgrade1 = "+2 Range", --"+4 Range"
-	nard_DragonFire_Upgrade2 =  "+2 Range", --"Side Push",
+	nard_DragonFire_Upgrade1 = "+ Shield" ,--"+2 Range", --"+4 Range"
+	nard_DragonFire_Upgrade2 = "+1 Damage", --"+2 Range", --"Side Push",
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
+
+	-- rework 
+	nard_frostHammer_Upgrade1 = "+Building Freeze",
+	nard_frostHammer_Upgrade2 = "+2 Damage",
+
+	narD_SidePushShot_Upgrade1 = "IceBreak" ,
+	narD_SidePushShot_Upgrade2 = "+Building Freeze" ,
+
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
 
@@ -17,8 +25,212 @@ local function isTipImage()
 	return Board:GetSize() == Point(6,6)
 end
 
+
+--Rework Prime Weapon 
+nard_frostHammer = Skill:new{  
+	Name = "Frost Hammer"; 
+	Description = "" ; 
+	Class = "Prime",
+	Icon = "weapons/frost_warhammer.png", 
+	PathSize = 1,
+	MinDamage =1,
+	Damage = 2,
+	PowerCost = 1,
+	Upgrades = 2,
+	UpgradeCost = { 2,3 },
+	BuildingFreeze = 0, 
+	--Limited = 1,
+	LaunchSound = "/weapons/mercury_fist",
+	TipImage = {
+		Unit = Point(2,3),
+		Enemy = Point(2,2),
+		Enemy2 = Point(3,2),
+		Target = Point(2,2)
+	}
+}
+
+function nard_frostHammer:GetSkillEffect(p1, p2)
+	local ret = SkillEffect()
+	local direction = GetDirection(p2 - p1)
+	
+	ret:AddDamage(SoundEffect(p2,self.LaunchSound))
+	
+	damage = SpaceDamage(p2, 0) --  self.Damage)
+	
+
+
+	if not Board:IsTerrain(p2,TERRAIN_LAVA) and Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2) and Board:GetTerrain(p2) ~= TERRAIN_ICE then	
+		damage.iTerrain = TERRAIN_ICE
+		if Board:IsFire(p2) then
+			damage.iTerrain = TERRAIN_WATER
+		end
+	end
+	ret:AddDamage(damage)
+
+	damage = SpaceDamage(p2, self.MinDamage) --  self.Damage)
+	if Board:IsBuilding(p2) and self.BuildingFreeze == 1 then 
+		damage.iDamage = 0
+		damage.iFrozen = 1 
+	end
+	damage.sAnimation = "explosmash_"..direction
+	ret:AddDamage(damage)
+	
+	ret:AddDelay(0.1)
+	ret:AddBounce(p2,3)
+	ret:AddDelay(0.2)
+	
+	local damage = SpaceDamage(p2 + DIR_VECTORS[direction], self.Damage, direction)
+	damage.sAnimation = "gaia_zeta_iceblast_"..direction
+
+	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
+		damage.iDamage = 0 
+		damage.iFrozen = 1
+	end
+
+	ret:AddDamage(damage)
+	
+	return ret
+end	
+
+nard_frostHammer_A = nard_frostHammer:new{
+	--Limited = 2,
+	UpgradeDescription = "Now Buildings are Frozen.",
+	BuildingFreeze = 1, 
+}
+
+nard_frostHammer_B = nard_frostHammer:new{
+	UpgradeDescription = "Increases damage by 2.",
+	MinDamage = 1,
+	Damage = 4,
+}
+
+nard_frostHammer_AB = nard_frostHammer:new{
+	BuildingFreeze = 1, 
+	MinDamage = 1,
+	Damage = 4,
+}
+--Rework Prime Weapon END 
+
+--Rework Brute? Weapon 
+narD_SidePushShot = TankDefault:new{  
+	Name = "Frost Cannon",--"SidePush Cannon",
+	Description = "" , 
+	Class = "Science", --"Science", --"Brute",
+	Icon = "weapons/frost_range.png", 
+	Damage = 0, --1,
+	PowerCost = 1,
+	--Phase = true,
+	Push = 0,--1,
+	Upgrades = 2,
+	UpgradeCost = { 2,3 },
+	BuildingFreeze = 0, 
+	--Limited = 1,
+	IceBreak = 0, 
+	BuildingFreeze = 0 , 
+	ProjectileArt = "effects/shot_phaseshot", 
+	LaunchSound = "/weapons/phase_shot",
+	TipImage = {
+		Unit = Point(2,2),
+		--Enemy = Point(2,2),
+		Enemy2 = Point(3,2),
+		Enemy3 = Point(3,3),
+		Enemy4 = Point(1,0),
+		Target = Point(2,1),
+
+		CustomEnemy = "Scorpion2",
+	}
+}
+
+function narD_SidePushShot:GetSkillEffect(p1,p2)
+	local ret = SkillEffect()
+	local dir = GetDirection(p2 - p1)
+	
+	local target = GetProjectileEnd(p1,p2,pathing)  
+	local distance = p1:Manhattan(target) 
+
+	-- if distance == 1 and (Board:IsTerrain(target,TERRAIN_FOREST) or Board:IsTerrain(target,TERRAIN_SAND)) then
+	-- 	local dmg = SpaceDamage(target, 0) 
+	-- 	dmg.iTerrain = TERRAIN_ICE 
+	-- 	if Board:IsFire(target) then
+	-- 		dmg.iTerrain = TERRAIN_WATER
+	-- 	end
+	-- 	ret:AddDamage(dmg)
+	-- end
+	
+	local damage = SpaceDamage(target, self.Damage )
+
+	local damage = SpaceDamage(target, self.Damage)
+	if self.Push == 1 then
+		damage = SpaceDamage(target, self.Damage, dir)
+	end
+	damage.sAnimation = "gaia_zeta_iceblast_"..dir
+	if Board:IsBuilding(target) and self.BuildingFreeze == 1 then 
+		damage.iDamage = 0 
+		damage.iFrozen = 1
+	end
+
+	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
+	
+	
+
+
+	for i = 1, distance  do
+		ret:AddDelay(0.06)
+		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
+		local curr = p1 + DIR_VECTORS[dir]*i
+		local damage = SpaceDamage( curr , 0 )  
+
+		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
+			damage.iTerrain = TERRAIN_ICE
+			if Board:IsFire(curr) then
+				damage.iTerrain = TERRAIN_WATER
+			end
+		end
+		ret:AddDamage(damage)
+
+		if i ~=distance then
+			damage = SpaceDamage(curr , self.IceBreak) 
+			ret:AddDamage(damage)
+		end 
+
+		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
+		damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
+		ret:AddDamage(damage)
+		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir-1)%4], 0, (dir-1)%4)
+		damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4 -- exploout0_
+		ret:AddDamage(damage)
+
+	end
+
+	
+	return ret
+	
+end
+
+narD_SidePushShot_A = narD_SidePushShot:new{
+	--Limited = 2,
+	UpgradeDescription = "" , 
+	IceBreak = 1, 
+	
+}
+
+narD_SidePushShot_B = narD_SidePushShot:new{
+	UpgradeDescription = "",
+	--Damage = 2, 
+	BuildingFreeze = 1, 
+}
+
+narD_SidePushShot_AB = narD_SidePushShot:new{
+	--Damage = 2, 
+	IceBreak  = 1, 
+	BuildingFreeze = 1, 
+}
+
+---rework end 
+
+
 nard_frostMoaun = Skill:new{
-	Name = "Frost Hammer",
+	Name = "Frost Hammer(old)",
 	Description = "Damage 2 adjacent tiles, pushing them apart and creating Ice tiles. Deals more damage to Ice tiles.",
 	--Description = "Punch an adjacent tiles, pushing them to the left and right. More Damage to units on the Ice Tile.",-- \n\n (Full Upgrade Bonus :\n ???) ", 
 	--"Push target tile and Make tiles to Ice. More Damage to units that already on Ice Tile. \n\n (Full Upgrade Bonus :\n ???)", 
@@ -157,8 +369,7 @@ nard_frostMoaun_AB = nard_frostMoaun:new{ --세번째 업그레이드를 적용�
 	IceDamage = 2,
 	MinDamage = 2 , 
 	
-	-- fully Upgrade Bonus?? 
-	--Full_Upgrade = 1 ,
+
 }
 
 ----
@@ -344,21 +555,22 @@ nard_Iceball_AB = nard_Iceball:new{
 
 nard_DragonFire = Skill:new{
 	Name = "Frost Bombs",
-	Description =  "Fly over targets, flipping their attack direction and creating Ice tiles. And Push tiles on either side when jumping.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
-	Class = "Science",
+	Description =  "Fly over targets, flipping their attack direction and creating Ice tiles.", --" And Push tiles on either side when jumping.",-- \n\n ( Full Upgrade Bonus :\n ???)", 
+	Class = "Brute", --"Science",
 	Icon =  "weapons/iceBomb.png",
 	Rarity = 3,
 	AttackAnimation = "ExploRepulse3",--"ExploRaining1",
 	Sound = "/general/combat/stun_explode",
 	MinMove = 2,
 	Range = 3, --2,  2 : 1칸, 3: 2칸... n : n-1 칸 
-	Damage = 0,
+	Damage = 1,--0,
 	Damage2 = 0,
 	AnimDelay = 0.2,
 	
-	SidePush = true, 
+	SidePush = false, --true, 
 	Full_Upgrade = 0, 
 	
+	Shield = 0 , 
 	PowerCost = 1,
 	DoubleAttack = 0, --does it attack again after stopping moving
 	Upgrades = 2,
@@ -368,15 +580,6 @@ nard_DragonFire = Skill:new{
 
 	CustomTipImage = "MyWeaponTip",
 
-	-- TipImage = {
-	-- 	Unit = Point(2,4),
-	-- 	Enemy = Point(2,3),
-	-- 	Enemy2 = Point(2,2),
-	-- 	Target = Point(2,1),
-	-- 	CustomEnemy = "Firefly2", --"Scorpion2",
-	-- 	Building = Point(4,2),
-	-- 	Length = 4,
-	-- }
 	TipImage = {
 		Unit = Point(2,4),
 		Enemy = Point(2,3),
@@ -475,54 +678,42 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		ret:AddDamage(damage)
 		ret:AddBounce(curr,3)
 		
-		if self.SidePush  then
-			local damage2 = SpaceDamage(curr + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
-			damage2.sAnimation =  "exploout0_"..(dir+1)%4  --"gaia_zeta_iceblast_"..((dir+1)%4)--
-			ret:AddDamage(damage2)
-			damage2 = SpaceDamage(curr + DIR_VECTORS[(dir-1)%4], 0, (dir-1)%4)
-			damage2.sAnimation = "exploout0_"..(dir-1)%4 --"gaia_zeta_iceblast_"..((dir-1)%4)--
-			ret:AddDamage(damage2)
-		end
-	--	ret:AddSound(self.BombLaunchSound)
+		
+		damage = SpaceDamage(p2, 0) 
+		damage.iShield = self.Shield  
+		ret:AddDamage(damage) 
+	
+		-- if self.SidePush  then
+		-- 	local damage2 = SpaceDamage(curr + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
+		-- 	damage2.sAnimation =  "exploout0_"..(dir+1)%4  --"gaia_zeta_iceblast_"..((dir+1)%4)--
+		-- 	ret:AddDamage(damage2)
+		-- 	damage2 = SpaceDamage(curr + DIR_VECTORS[(dir-1)%4], 0, (dir-1)%4)
+		-- 	damage2.sAnimation = "exploout0_"..(dir-1)%4 --"gaia_zeta_iceblast_"..((dir-1)%4)--
+		-- 	ret:AddDamage(damage2)
+		-- end
+
 	end
 
-	-- if Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2) and Board:GetTerrain(p2) ~= TERRAIN_ICE then
-	-- 	spaceDamage3 = SpaceDamage(p2, 0)
-	-- 	spaceDamage3.iTerrain = TERRAIN_ICE
-	-- 	if Board:IsFire(p2) then
-	-- 		spaceDamage3.iTerrain = TERRAIN_WATER
-	-- 	end
 
-	-- 	ret:AddDamage(spaceDamage3) 
-	-- end
-	
 	return ret
 end
 
 nard_DragonFire_A = nard_DragonFire:new{
-	UpgradeDescription = "Allows jumping over any number of additional targets.",
-	Range = 5 , --7, 
+	UpgradeDescription = "Gain Shield",
+	Shield = 1, 
+	-- Range = 5 , --7, 
 	--AttackAnimation = "ExploRaining2",
 
 	CustomTipImage = "MyWeaponTip",
-	-- TipImage = {
-	-- 	Unit = Point(2,5),
-	-- 	Enemy = Point(2,4),
-	-- 	--Enemy2 = Point(2,4),
-	-- 	Enemy3 = Point(2,3),
-	-- 	Enemy4 = Point(2,2),
-	-- 	Enemy5 = Point(2,1),
-	-- 	Target = Point(2,0),
-	-- 	CustomEnemy = "Scorpion2",
-	-- 	--Length = 4,
-	-- }
+
 }
 
 nard_DragonFire_B = nard_DragonFire:new{
 	--UpgradeDescription = "Push tiles on either side when jumping.",
-	UpgradeDescription = "Allows jumping over any number of additional targets.",
+	UpgradeDescription = "Increase damage by 1" , --"Allows jumping over any number of additional targets.",
+	Damage = 2, 
 	--SidePush = 1, 
-	Range = 5 , 
+	-- Range = 5 , 
 	-- TipImage = {
 	-- 	Unit = Point(2,3),
 	-- 	Enemy = Point(1,2),
@@ -534,20 +725,22 @@ nard_DragonFire_B = nard_DragonFire:new{
 }
 
 nard_DragonFire_AB = nard_DragonFire:new{
-	Range = 7 ,  -- 
-	--SidePush = 1 ,
-	
-	CustomTipImage = "MyWeaponTip",
-	TipImage = {
-		Unit = Point(2,3),
-		Enemy = Point(2,2),
-		Enemy2 = Point(3,2),
-		Enemy3 = Point(3,3),
-		Enemy4 = Point(1,0),
-		Target = Point(2,0),
 
-		CustomEnemy = "Scorpion2",
-	}
+	Damage = 2, 
+	-- Range = 7 ,  -- 
+	--SidePush = 1 ,
+	Shield = 1, 
+	CustomTipImage = "MyWeaponTip",
+	-- TipImage = {
+	-- 	Unit = Point(2,3),
+	-- 	Enemy = Point(2,2),
+	-- 	Enemy2 = Point(3,2),
+	-- 	Enemy3 = Point(3,3),
+	-- 	Enemy4 = Point(1,0),
+	-- 	Target = Point(2,0),
+
+	-- 	CustomEnemy = "Scorpion2",
+	-- }
 
 }
 
