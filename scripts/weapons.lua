@@ -122,7 +122,7 @@ narD_SidePushShot = TankDefault:new{
 	--Phase = true,
 	Push = 0,--1,
 	Upgrades = 2,
-	UpgradeCost = { 2,3 },
+	UpgradeCost = { 2, 2 },
 	BuildingFreeze = 0, 
 	--Limited = 1,
 	IceBreak = 0, 
@@ -163,7 +163,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	if self.Push == 1 then
 		damage = SpaceDamage(target, self.Damage, dir)
 	end
-	damage.sAnimation = "gaia_zeta_iceblast_"..dir
+	-- damage.sAnimation = "gaia_zeta_iceblast_"..dir
 	if Board:IsBuilding(target) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0 
 		damage.iFrozen = 1
