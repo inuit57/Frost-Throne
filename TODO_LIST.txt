@@ -3,12 +3,5 @@
 * Squad Description 
 
 <Weapon>
-* Phase Shield preview
-* Description chanage ( phase shield, iceball) 
 
 <Image>
-* Weapons Icon (ice ball) 
-* Pawns Image 
-* Squad Icon
-
-*Weapon Effect (Phase Shield) 
