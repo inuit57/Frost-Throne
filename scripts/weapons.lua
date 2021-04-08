@@ -43,8 +43,8 @@ nard_frostHammer = Skill:new{
 	LaunchSound = "/weapons/mercury_fist",
 	TipImage = {
 		Unit = Point(2,3),
-		Enemy = Point(2,2),
-		Enemy2 = Point(3,2),
+		Building = Point(2,2),
+		Enemy = Point(2,1),
 		Target = Point(2,2)
 	}
 }
@@ -130,11 +130,11 @@ narD_SidePushShot = TankDefault:new{
 	ProjectileArt = "effects/shot_phaseshot", 
 	LaunchSound = "/weapons/phase_shot",
 	TipImage = {
-		Unit = Point(2,2),
+		Unit = Point(2,4),
 		--Enemy = Point(2,2),
 		Enemy2 = Point(3,2),
 		Enemy3 = Point(3,3),
-		Enemy4 = Point(1,0),
+		Enemy4 = Point(3,0),
 		Target = Point(2,1),
 
 		Building = Point (2,0), 
