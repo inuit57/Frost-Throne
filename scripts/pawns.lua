@@ -37,7 +37,7 @@ AddPawn("narD_DrakoMech")
 narD_IcicleMech = Pawn:new {
 	Name = "Icicle Mech",
 	Class = "Science", --"Science",--"Ranged",
-	Health = 2,
+	Health = 3,--2,
 	Image = "IcycleMech",
 	ImageOffset = 6,
 	Flying = true,
