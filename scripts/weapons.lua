@@ -29,7 +29,7 @@ end
 --Rework Prime Weapon 
 nard_frostHammer = Skill:new{  
 	Name = "Frost Hammer"; 
-	Description = "" ; 
+	Description =  "Smash the ground, creating ice tile and pushing adjacent tile.", 
 	Class = "Prime",
 	Icon = "weapons/frost_warhammer.png", 
 	PathSize = 1,
@@ -43,7 +43,7 @@ nard_frostHammer = Skill:new{
 	LaunchSound = "/weapons/mercury_fist",
 	TipImage = {
 		Unit = Point(2,3),
-		Building = Point(2,2),
+		
 		Enemy = Point(2,1),
 		Target = Point(2,2)
 	}
@@ -94,8 +94,16 @@ end
 
 nard_frostHammer_A = nard_frostHammer:new{
 	--Limited = 2,
-	UpgradeDescription = "Now Buildings are Frozen.",
+	UpgradeDescription = "This attack will freeze Grid Buildings.", --"Freeze the building.",
 	BuildingFreeze = 1, 
+
+	TipImage = {
+		Unit = Point(2,3),
+		Building = Point(2,2),
+		Enemy = Point(2,1),
+		Target = Point(2,2)
+	}
+
 }
 
 nard_frostHammer_B = nard_frostHammer:new{
@@ -104,17 +112,18 @@ nard_frostHammer_B = nard_frostHammer:new{
 	Damage = 4,
 }
 
-nard_frostHammer_AB = nard_frostHammer:new{
+nard_frostHammer_AB = nard_frostHammer_A:new{
 	BuildingFreeze = 1, 
 	MinDamage = 1,
 	Damage = 4,
+	
 }
 --Rework Prime Weapon END 
 
 --Rework Brute? Weapon 
 narD_SidePushShot = TankDefault:new{  
 	Name = "Frost Cannon",--"SidePush Cannon",
-	Description = "" , 
+	Description = "Fire a non-damaging projectile that creates ice as it passes and pushes targets along both sides of the path. " , 
 	Class = "Science", --"Science", --"Brute",
 	Icon = "weapons/frost_range.png", 
 	Damage = 0, --1,
@@ -127,7 +136,8 @@ narD_SidePushShot = TankDefault:new{
 	--Limited = 1,
 	IceBreak = 0, 
 	BuildingFreeze = 0 , 
-	ProjectileArt = "effects/shot_phaseshot", 
+	--ProjectileArt = "effects/shot_phaseshot", 
+	ProjectileArt = "effects/shot_frostShot", 
 	LaunchSound = "/weapons/phase_shot",
 	TipImage = {
 		Unit = Point(2,4),
@@ -218,13 +228,13 @@ end
 
 narD_SidePushShot_A = narD_SidePushShot:new{
 	--Limited = 2,
-	UpgradeDescription = "" , 
+	UpgradeDescription = "Instead ice tile, create broken ice tile." , 
 	IceBreak = 1, 
 	
 }
 
 narD_SidePushShot_B = narD_SidePushShot:new{
-	UpgradeDescription = "",
+	UpgradeDescription = "This attack will freeze Grid Buildings.",
 	--Damage = 2, 
 	BuildingFreeze = 1, 
 }
