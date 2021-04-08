@@ -43,8 +43,8 @@ nard_frostHammer = Skill:new{
 	LaunchSound = "/weapons/mercury_fist",
 	TipImage = {
 		Unit = Point(2,3),
-		Enemy = Point(2,2),
-		Enemy2 = Point(3,2),
+		Building = Point(2,2),
+		Enemy = Point(2,1),
 		Target = Point(2,2)
 	}
 }
@@ -122,7 +122,7 @@ narD_SidePushShot = TankDefault:new{
 	--Phase = true,
 	Push = 0,--1,
 	Upgrades = 2,
-	UpgradeCost = { 2,3 },
+	UpgradeCost = { 2, 2 },
 	BuildingFreeze = 0, 
 	--Limited = 1,
 	IceBreak = 0, 
@@ -130,14 +130,15 @@ narD_SidePushShot = TankDefault:new{
 	ProjectileArt = "effects/shot_phaseshot", 
 	LaunchSound = "/weapons/phase_shot",
 	TipImage = {
-		Unit = Point(2,2),
+		Unit = Point(2,4),
 		--Enemy = Point(2,2),
 		Enemy2 = Point(3,2),
 		Enemy3 = Point(3,3),
-		Enemy4 = Point(1,0),
+		Enemy4 = Point(3,0),
 		Target = Point(2,1),
 
-		CustomEnemy = "Scorpion2",
+		Building = Point (2,0), 
+		
 	}
 }
 
@@ -163,9 +164,9 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	if self.Push == 1 then
 		damage = SpaceDamage(target, self.Damage, dir)
 	end
-	damage.sAnimation = "gaia_zeta_iceblast_"..dir
+	-- damage.sAnimation = "gaia_zeta_iceblast_"..dir
 	if Board:IsBuilding(target) and self.BuildingFreeze == 1 then 
-		damage.iDamage = 0 
+		--damage.iDamage = 0 
 		damage.iFrozen = 1
 	end
 
@@ -186,19 +187,27 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 				damage.iTerrain = TERRAIN_WATER
 			end
 		end
+		
+		if Board:IsBuilding(curr) and self.BuildingFreeze == 1 then 
+			damage.iFrozen = 1	
+		end
+
 		ret:AddDamage(damage)
 
 		if i ~=distance then
 			damage = SpaceDamage(curr , self.IceBreak) 
 			ret:AddDamage(damage)
-		end 
-
+		end
+		
 		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
 		damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
 		ret:AddDamage(damage)
 		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir-1)%4], 0, (dir-1)%4)
 		damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4 -- exploout0_
 		ret:AddDamage(damage)
+
+
+
 
 	end
 
