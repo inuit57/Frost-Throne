@@ -1,19 +1,23 @@
 local function init(self)
 	require(self.scriptPath.."FURL")(self, {
+
 		-- {
 		-- 	Type = "color",
 		-- 	Name = "FrostThrone",
 		-- 	PawnLocation = self.scriptPath.."pawns",
 			
-		-- 	PlateHighlight =	{242, 132, 34},	--lights
-		-- 	PlateLight =		{116, 125, 127},	--main highlight
-		-- 	PlateMid =			{62, 71, 73},	--main light
-		-- 	PlateDark =			{29, 38, 40},	--main mid
+		-- 	PlateHighlight =	{55, 202, 226},	--lights
+		-- 	PlateLight =		{10, 160, 153},	--main highlight
+		-- 	PlateMid =			{25, 75, 89},	--main light
+		-- 	PlateDark =			{20, 73, 81},	--main mid
 		-- 	PlateOutline =		{7, 12, 13},	--main dark
+
 		-- 	BodyHighlight =		{61, 69, 63},	--metal light
 		-- 	BodyColor =			{30, 35, 34},	--metal mid
 		-- 	PlateShadow =		{15, 17, 17},	--metal dark
-		-- },
+		-- }, 
+		-- 색감은 아직도 잘 모르겠다. 
+
 		{
 			Type = "mech",
 			Name = "FrostMech",
@@ -56,34 +60,7 @@ local function init(self)
 			SubmergedBroken =   {  PosX = -17, PosY = 5 },
 			Icon =              {},
 		},
-		-- {
-		-- 	Type = "mech",
-		-- 	Name = "StealthMech",
-		-- 	Filename = "ronin_mech_stealth",
-		-- 	Path = "img", 
-		-- 	ResourcePath = "units/player",
-
-		-- 	Default =           { PosX = -37, PosY = -19 },
-		-- 	Animated =          { PosX = -37, PosY = -19, NumFrames = 12},
-		-- 	Broken =            { PosX = -37, PosY = -19 },
-		-- 	Submerged =         { PosX = -37, PosY = -19 },
-		-- 	SubmergedBroken =   { PosX = -37, PosY = -19 },
-		-- 	Icon =              {},
-		-- },
-		-- {
-		-- 	Type = "mech",
-		-- 	Name = "HunterMech",
-		-- 	Filename = "ronin_mech_hunter",
-		-- 	Path = "img", 
-		-- 	ResourcePath = "units/player",
-
-		-- 	Default =           { PosX = -37, PosY = -19 },
-		-- 	Animated =          { PosX = -37, PosY = -19, NumFrames = 4},
-		-- 	Broken =            { PosX = -37, PosY = -19 },
-		-- 	Submerged =         { PosX = -37, PosY = -19 },
-		-- 	SubmergedBroken =   { PosX = -37, PosY = -19 },
-		-- 	Icon =              {},
-		-- }
+		
 	});
 
 	require(self.scriptPath.."pawns")
@@ -107,6 +84,31 @@ local function init(self)
 	modApi:appendAsset("img/effects/gaia_zeta_iceblast_U.png",self.resourcePath.."img/effects/gaia_zeta_iceblast_U.png")
 	modApi:appendAsset("img/effects/gaia_zeta_iceblast_R.png",self.resourcePath.."img/effects/gaia_zeta_iceblast_R.png")
 	modApi:appendAsset("img/effects/gaia_zeta_iceblast_L.png",self.resourcePath.."img/effects/gaia_zeta_iceblast_L.png")
+
+
+
+	require(self.scriptPath .."achievements/init")
+	require(self.scriptPath .."achievements")
+	require(self.scriptPath .."achievementTriggers"):init()
+	local achvApi = require(self.scriptPath.."/achievements/api")
+
+
+	local shop = require(self.scriptPath .."shop")
+	shop:addWeapon({
+		id = "nard_frostHammer",
+		name = nard_frostHammer.Name,
+		desc = "Adds Frost Hammer to the store."
+	})
+	shop:addWeapon({
+		id = "nard_DragonFire",
+		name = nard_DragonFire.Name,
+		desc = "Adds Frost Bombs to the store."
+	})
+	shop:addWeapon({
+		id = "narD_SidePushShot",
+		name = narD_SidePushShot.Name,
+		desc = "Adds Frost Cannon to the store."
+	})
 end
 
 
@@ -117,23 +119,21 @@ end
 local function load(self,options,version)
 
 	--assert(package.loadlib(self.resourcePath .."/lib/utils.dll", "luaopen_utils"))()
-	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Tip) Ice + Fire = Water ",self.resourcePath.."/squad_icon.png")
+	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne"," ",self.resourcePath.."/squad_icon.png")
+	require(self.scriptPath .."shop"):load(options)
 
---modApi:addNextTurnHook(function()
-	--DelayHeal:DelayRepair()
---end)
 
 end
 
 
 
 return {
-	id = "Frost Throne", --스쿼드 id. 이름이랑 같게 해줘도 상관은 없음.
-	name = "Frost Throne", --스쿼드 이름. 위의 이름과 동일하게 맞춰줄 것.
-	version = "1.0.0", --버전.
+	id = "Frost Throne", 
+	name = "Frost Throne", 
+	version = "1.2.0", 
 	requirements = {},
 	init = init,
     icon = "mod_icon.png",
 	load = load,
-	description = "" --설명 추가. 
+	description = "" 
 }
