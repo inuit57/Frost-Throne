@@ -756,12 +756,12 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 
 	end
 
-	local count = Board:GetEnemyCount()
+	local countEnemy = Board:GetEnemyCount()
 	ret:AddScript(string.format([[
 		local fx = SkillEffect();
 		fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_IceBreaker') end")
 		Board:AddEffect(fx);
-	]], count))
+	]], countEnemy))
 
 
 	local count = 0 
@@ -777,7 +777,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 	if count >= 12 then 
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
-	
+
 	return ret
 end
 
