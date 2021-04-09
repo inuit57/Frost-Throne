@@ -593,7 +593,7 @@ nard_DragonFire = Skill:new{
 	PowerCost = 1,
 	DoubleAttack = 0, --does it attack again after stopping moving
 	Upgrades = 2,
-	UpgradeCost = {2,2},
+	UpgradeCost = {1,2},
 	LaunchSound = "/weapons/enhanced_tractor",----"/weapons/bomb_strafe",
 	BombSound = "/impact/generic/tractor_beam",--"/impact/generic/explosion",
 
