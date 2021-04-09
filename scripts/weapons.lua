@@ -52,7 +52,8 @@ nard_frostHammer = Skill:new{
 function nard_frostHammer:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 	local direction = GetDirection(p2 - p1)
-	
+	local achieve_flag = false 
+
 	ret:AddDamage(SoundEffect(p2,self.LaunchSound))
 	
 	damage = SpaceDamage(p2, 0) --  self.Damage)
@@ -71,6 +72,7 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	if Board:IsBuilding(p2) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0
 		damage.iFrozen = 1 
+		achieve_flag = true
 	end
 	damage.sAnimation = "explosmash_"..direction
 	ret:AddDamage(damage)
@@ -80,21 +82,41 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	ret:AddDelay(0.2)
 	
 	local damage = SpaceDamage(p2 + DIR_VECTORS[direction], self.Damage, direction)
+
+	
 	damage.sAnimation = "gaia_zeta_iceblast_"..direction
 
 	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0 
 		damage.iFrozen = 1
+		achieve_flag = true
 	end
 
 	ret:AddDamage(damage)
 	
-	local count = Board:GetEnemyCount()
-	ret:AddScript(string.format([[
-		local fx = SkillEffect();
-		fx:AddScript("if %s - Board:GetEnemyCount() >= 2 then narD_frost_Chievo('narD_frost_IceBreaker') end")
-		Board:AddEffect(fx);
-	]], count))
+	if achieve_flag == true then
+		local countEnemy = Board:GetEnemyCount()
+		ret:AddScript(string.format([[
+			local fx = SkillEffect();
+			fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_Slam') end")
+			Board:AddEffect(fx);
+		]], countEnemy))
+	end
+
+	
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
+	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
 
 	return ret
 end	
@@ -228,7 +250,21 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	end
 
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
 	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
+
+
 	return ret
 	
 end
@@ -720,6 +756,27 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 
 	end
 
+	local countEnemy = Board:GetEnemyCount()
+	ret:AddScript(string.format([[
+		local fx = SkillEffect();
+		fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_IceBreaker') end")
+		Board:AddEffect(fx);
+	]], countEnemy))
+
+
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
+	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
 
 	return ret
 end

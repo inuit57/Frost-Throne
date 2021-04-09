@@ -30,8 +30,8 @@ local imgs = {
 	"ach_4clear",
 	"ach_perfect",
 	"IceBreaker",
-	-- "crowded",
-	-- "goride",
+	"Slam",
+	"WIC_2",
 	-- "secret",
 }
 
@@ -44,23 +44,23 @@ end
 achvApi:AddChievo{
 	id = "narD_frost_IceBreaker",
 	name = "IceBreaker",
-	tip = "Kill 2 enemies with a single attack of the Frost Hammer with the Frost Throne squad",
+	tip = "Kill 2 enemies with a single attack of the Frost Bombs with the Frost Throne squad",
 	img = "img/achievements/narD_frost_IceBreaker.png",
 }
 
--- achvApi:AddChievo{
--- 	id = "narD_acid_crowded",
--- 	name = "Crowded Sky",
--- 	tip = "Move at least 8 units using the Microburst with the Windriders squad.",
--- 	img = "img/achievements/narD_acid_crowded.png",
--- }
+achvApi:AddChievo{
+	id = "narD_frost_Slam",
+	name = "Ice Snap",
+	tip = "Freeze 1 Building and kill 1 enemy with a singhle attack of the Frost Hammer with the Frost Throne squad.",
+	img = "img/achievements/narD_frost_Slam.png",
+}
 
--- achvApi:AddChievo{
--- 	id = "narD_acid_goride",
--- 	name = "Frequent Flyer",
--- 	tip = "Leap at least 4 tiles with 2 enemies using the Aero Thrusters with the Windriders squad.",
--- 	img = "img/achievements/narD_acid_goride.png",
--- }
+achvApi:AddChievo{
+	id = "narD_frost_WIC",
+	name = "Winter Is Comming",
+	tip = "Make 12 Broken Ice tiles with the Frost Throne squad",
+	img = "img/achievements/narD_frost_WIC_2.png",
+}
 
 -- achvApi:AddChievo{
 -- 		id = "narD_acid_secret",
