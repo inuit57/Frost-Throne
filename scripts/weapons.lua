@@ -95,12 +95,12 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	ret:AddDamage(damage)
 	
 	if achieve_flag == true then
-		local count = Board:GetEnemyCount()
+		local countEnemy = Board:GetEnemyCount()
 		ret:AddScript(string.format([[
 			local fx = SkillEffect();
 			fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_Slam') end")
 			Board:AddEffect(fx);
-		]], count))
+		]], countEnemy))
 	end
 
 	
