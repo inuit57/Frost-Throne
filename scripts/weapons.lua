@@ -52,7 +52,8 @@ nard_frostHammer = Skill:new{
 function nard_frostHammer:GetSkillEffect(p1, p2)
 	local ret = SkillEffect()
 	local direction = GetDirection(p2 - p1)
-	
+	local achieve_flag = false 
+
 	ret:AddDamage(SoundEffect(p2,self.LaunchSound))
 	
 	damage = SpaceDamage(p2, 0) --  self.Damage)
@@ -71,6 +72,7 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	if Board:IsBuilding(p2) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0
 		damage.iFrozen = 1 
+		achieve_flag = true
 	end
 	damage.sAnimation = "explosmash_"..direction
 	ret:AddDamage(damage)
@@ -80,21 +82,28 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	ret:AddDelay(0.2)
 	
 	local damage = SpaceDamage(p2 + DIR_VECTORS[direction], self.Damage, direction)
+
+	
 	damage.sAnimation = "gaia_zeta_iceblast_"..direction
 
 	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0 
 		damage.iFrozen = 1
+		achieve_flag = true
 	end
 
 	ret:AddDamage(damage)
 	
-	local count = Board:GetEnemyCount()
-	ret:AddScript(string.format([[
-		local fx = SkillEffect();
-		fx:AddScript("if %s - Board:GetEnemyCount() >= 2 then narD_frost_Chievo('narD_frost_IceBreaker') end")
-		Board:AddEffect(fx);
-	]], count))
+	if achieve_flag == true then
+		local count = Board:GetEnemyCount()
+		ret:AddScript(string.format([[
+			local fx = SkillEffect();
+			fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_Slam') end")
+			Board:AddEffect(fx);
+		]], count))
+	end
+
+	
 
 	return ret
 end	
@@ -720,6 +729,12 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 
 	end
 
+	local count = Board:GetEnemyCount()
+	ret:AddScript(string.format([[
+		local fx = SkillEffect();
+		fx:AddScript("if %s - Board:GetEnemyCount() >= 1 then narD_frost_Chievo('narD_frost_IceBreaker') end")
+		Board:AddEffect(fx);
+	]], count))
 
 	return ret
 end
