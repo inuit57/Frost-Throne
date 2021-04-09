@@ -104,6 +104,19 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	end
 
 	
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
+	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
 
 	return ret
 end	
@@ -237,7 +250,21 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	end
 
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
 	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
+
+
 	return ret
 	
 end
@@ -736,6 +763,21 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		Board:AddEffect(fx);
 	]], count))
 
+
+	local count = 0 
+	for i = 0, 7 do
+		for j = 0, 7  do
+			local curr = Point(i,j)
+			if Board:IsTerrain(curr,TERRAIN_ICE) then
+				count = count + 1 
+			end
+		end
+	end
+	
+	if count >= 12 then 
+		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
+	end
+	
 	return ret
 end
 

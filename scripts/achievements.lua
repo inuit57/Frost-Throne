@@ -31,7 +31,7 @@ local imgs = {
 	"ach_perfect",
 	"IceBreaker",
 	"Slam",
-	-- "goride",
+	"WIC_2",
 	-- "secret",
 }
 
@@ -50,17 +50,17 @@ achvApi:AddChievo{
 
 achvApi:AddChievo{
 	id = "narD_frost_Slam",
-	name = "Frost Slam",
+	name = "Ice Snap",
 	tip = "Freeze 1 Building and kill 1 enemy with a singhle attack of the Frost Hammer with the Frost Throne squad.",
 	img = "img/achievements/narD_frost_Slam.png",
 }
 
--- achvApi:AddChievo{
--- 	id = "narD_acid_goride",
--- 	name = "Frequent Flyer",
--- 	tip = "Leap at least 4 tiles with 2 enemies using the Aero Thrusters with the Windriders squad.",
--- 	img = "img/achievements/narD_acid_goride.png",
--- }
+achvApi:AddChievo{
+	id = "narD_frost_WIC",
+	name = "Winter Is Comming",
+	tip = "Make 12 Broken Ice tiles with the Frost Throne squad",
+	img = "img/achievements/narD_frost_WIC_2.png",
+}
 
 -- achvApi:AddChievo{
 -- 		id = "narD_acid_secret",
