@@ -89,6 +89,13 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 
 	ret:AddDamage(damage)
 	
+	local count = Board:GetEnemyCount()
+	ret:AddScript(string.format([[
+		local fx = SkillEffect();
+		fx:AddScript("if %s - Board:GetEnemyCount() >= 2 then narD_frost_Chievo('narD_frost_IceBreaker') end")
+		Board:AddEffect(fx);
+	]], count))
+
 	return ret
 end	
 

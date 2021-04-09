@@ -1,8 +1,8 @@
 
 local path = mod_loader.mods[modApi.currentMod].scriptPath
 local achvApi = require(path .."achievements/api")
-local narD_squadname = "A.rtificial Mechs"
-local narD_achvname = "narD_acid_"
+local narD_squadname = "Frost Throne"
+local narD_achvname = "narD_frost_"
 
 local this = {}
 
