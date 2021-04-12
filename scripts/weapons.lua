@@ -114,7 +114,7 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 		end
 	end
 	
-	if count >= 12 then 
+	if count >= 30 then 
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
 
@@ -260,7 +260,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		end
 	end
 	
-	if count >= 12 then 
+	if count >= 30 then 
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
 
@@ -774,7 +774,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		end
 	end
 	
-	if count >= 12 then 
+	if count >= 30 then 
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
 
