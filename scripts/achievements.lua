@@ -58,7 +58,7 @@ achvApi:AddChievo{
 achvApi:AddChievo{
 	id = "narD_frost_WIC",
 	name = "Winter Is Coming",
-	tip = "Make 12 Broken Ice tiles with the Frost Throne squad",
+	tip = "Make 30 Ice tiles with the Frost Throne squad",
 	img = "img/achievements/narD_frost_WIC_2.png",
 }
 
