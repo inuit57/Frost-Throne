@@ -5,7 +5,7 @@ local wt2 = {
 	nard_Iceball_Upgrade1 = "+1 Min Damage",--"Building Immune", --"+2 Center Damage",
 	nard_Iceball_Upgrade2 = "+1 Max Damage",
 	
-	nard_DragonFire_Upgrade1 = "+ Shield" ,--"+2 Range", --"+4 Range"
+	nard_DragonFire_Upgrade1 = "Gain Shield" ,--"+2 Range", --"+4 Range"
 	nard_DragonFire_Upgrade2 = "+1 Damage", --"+2 Range", --"Side Push",
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
