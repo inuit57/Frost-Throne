@@ -12,11 +12,11 @@ local wt2 = {
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
 
 	-- rework 
-	nard_frostHammer_Upgrade1 = "+Building Freeze",
+	nard_frostHammer_Upgrade1 = "Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
 	narD_SidePushShot_Upgrade1 = "IceBreak" ,
-	narD_SidePushShot_Upgrade2 = "+Building Freeze" ,
+	narD_SidePushShot_Upgrade2 = "Building Freeze" ,
 
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
