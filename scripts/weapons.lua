@@ -196,8 +196,6 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	-- 	end
 	-- 	ret:AddDamage(dmg)
 	-- end
-	
-	local damage = SpaceDamage(target, self.Damage )
 
 	local damage = SpaceDamage(target, self.Damage)
 	if self.Push == 1 then
