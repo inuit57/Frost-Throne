@@ -224,7 +224,12 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
 	
-	
+	if self.Unstable == 1 then
+		damage = SpaceDamage(target, 0, dir)
+		ret:AddDamage(damage)
+		damage = SpaceDamage(p1, 0, dir2)
+		ret:AddDamage(damage)
+	end
 
 
 	for i = 1, distance  do
@@ -269,12 +274,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	end
 
-	if self.Unstable == 1 then
-		damage = SpaceDamage(target, 0, dir)
-		ret:AddDamage(damage)
-		damage = SpaceDamage(p1, 0, dir2)
-		ret:AddDamage(damage)
-	end
+
 
 
 	local count = 0 
