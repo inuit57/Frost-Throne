@@ -18,7 +18,7 @@ narD_FrostMech = Pawn:new {
 AddPawn("narD_FrostMech")
 
 narD_DrakoMech = Pawn:new  {
-	Name = "Drako Mech",
+	Name = "IceJet Mech",
 	Class = "Brute", --Brute
 	Health = 2,
 	Image = "DrakoMech",
