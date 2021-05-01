@@ -33,7 +33,7 @@ nard_frostHammer = Skill:new{
 	Class = "Prime",
 	Icon = "weapons/frost_warhammer.png", 
 	PathSize = 1,
-	MinDamage =0,
+	--MinDamage =0,
 	Damage = 2,
 	PowerCost = 1,
 	Upgrades = 2,
@@ -68,7 +68,7 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	end
 	ret:AddDamage(damage)
 
-	damage = SpaceDamage(p2, self.MinDamage) --  self.Damage)
+	damage = SpaceDamage(p2, 0) --self.MinDamage) --  self.Damage)
 	if Board:IsBuilding(p2) and self.BuildingFreeze == 1 then 
 		damage.iDamage = 0
 		damage.iFrozen = 1 
@@ -99,11 +99,11 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	
 	damage.sAnimation = "gaia_zeta_iceblast_"..direction
 
-	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
-		damage.iDamage = 0 
-		damage.iFrozen = 1
-		achieve_flag = true
-	end
+	-- if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
+	-- 	damage.iDamage = 0 
+	-- 	damage.iFrozen = 1
+	-- 	achieve_flag = true
+	-- end
 
 	ret:AddDamage(damage)
 	
@@ -136,7 +136,7 @@ end
 
 nard_frostHammer_A = nard_frostHammer:new{
 	--Limited = 2,
-	UpgradeDescription = "This attack will freeze Grid Buildings.", --"Freeze the building.",
+	UpgradeDescription = "This adjacent attack will freeze Grid Buildings.", --"Freeze the building.",
 	BuildingFreeze = 1, 
 
 	TipImage = {
@@ -149,14 +149,14 @@ nard_frostHammer_A = nard_frostHammer:new{
 }
 
 nard_frostHammer_B = nard_frostHammer:new{
-	UpgradeDescription = "Increases damage by 2.and Minimum damage by 1",
-	MinDamage = 1,
+	UpgradeDescription = "Increases damage by 2.",--and Minimum damage by 1",
+	--MinDamage = 1,
 	Damage = 4,
 }
 
 nard_frostHammer_AB = nard_frostHammer_A:new{
 	BuildingFreeze = 1, 
-	MinDamage = 1,
+	--MinDamage = 1,
 	Damage = 4,
 	
 }
@@ -225,8 +225,6 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
 	
 	if self.Unstable == 1 then
-		damage = SpaceDamage(target, 0, dir)
-		ret:AddDamage(damage)
 		damage = SpaceDamage(p1, 0, dir2)
 		ret:AddDamage(damage)
 	end
@@ -237,14 +235,13 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
 		local curr = p1 + DIR_VECTORS[dir]*i
 		local damage = SpaceDamage( curr , 0 )  
-		if not Board:IsBuilding(curr) then
-			damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
-		end
-
+		
 		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
 			damage.iTerrain = TERRAIN_ICE
+			damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
 			if Board:IsFire(curr) then
 				damage.iTerrain = TERRAIN_WATER
+				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
 			end
 		end
 		
@@ -274,7 +271,11 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	end
 
-
+	if self.Unstable == 1 then
+		damage = SpaceDamage(target, 0, dir)
+		damage.sImageMark = "combat/icons/narD_icon_ice_glowU.png"
+		ret:AddDamage(damage)
+	end
 
 
 	local count = 0 
