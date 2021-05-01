@@ -159,7 +159,7 @@ end
 return {
 	id = "Frost Throne", 
 	name = "Frost Throne", 
-	version = "2.0.0", 
+	version = "2.0.1", 
 	requirements = {},
 	init = init,
     icon = "mod_icon.png",
