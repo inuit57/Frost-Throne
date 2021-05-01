@@ -15,8 +15,8 @@ local wt2 = {
 	nard_frostHammer_Upgrade1 = "Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
-	narD_SidePushShot_Upgrade1 = "IceBreak" ,
-	narD_SidePushShot_Upgrade2 = "Building Freeze" ,
+	narD_SidePushShot_Upgrade1 = "Unstable shot" ,
+	narD_SidePushShot_Upgrade2 = "IceBreak" ,--"Building Freeze" ,
 
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
@@ -78,8 +78,13 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	
 	if not Board:IsTerrain(p2,TERRAIN_ICE) and not Board:IsBuilding(p2) then 
 		damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
+		
 		if self.MinDamage > 0 then				
 			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+		end
+
+		if Board:IsFire(p2) then
+			damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
 		end
 	end
 
@@ -208,9 +213,8 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	-- end
 
 	local damage = SpaceDamage(target, self.Damage)
-	if self.Unstable == 1 then
+	if self.Push == 1 then
 		damage = SpaceDamage(target, self.Damage, dir)
-		damage = SpaceDamage(p1, 0, dir2)
 	end
 	-- damage.sAnimation = "gaia_zeta_iceblast_"..dir
 	if Board:IsBuilding(target) and self.BuildingFreeze == 1 then 
@@ -249,6 +253,9 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 			damage = SpaceDamage(curr , self.IceBreak) 
 			if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
 				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+				if Board:IsFire(curr) then
+					damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+				end
 			end
 			ret:AddDamage(damage)
 		end
@@ -261,6 +268,14 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddDamage(damage)
 
 	end
+
+	if self.Unstable == 1 then
+		damage = SpaceDamage(target, 0, dir)
+		ret:AddDamage(damage)
+		damage = SpaceDamage(p1, 0, dir2)
+		ret:AddDamage(damage)
+	end
+
 
 	local count = 0 
 	for i = 0, 7 do
@@ -276,6 +291,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
 
+	
 
 	return ret
 	
@@ -753,6 +769,9 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		
 		if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
 			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			if Board:IsFire(curr) then
+				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+			end
 		end
 		ret:AddDamage(damage)
 		ret:AddBounce(curr,3)
