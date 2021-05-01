@@ -99,11 +99,11 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	
 	damage.sAnimation = "gaia_zeta_iceblast_"..direction
 
-	if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
-		damage.iDamage = 0 
-		damage.iFrozen = 1
-		achieve_flag = true
-	end
+	-- if Board:IsBuilding(p2 + DIR_VECTORS[direction]) and self.BuildingFreeze == 1 then 
+	-- 	damage.iDamage = 0 
+	-- 	damage.iFrozen = 1
+	-- 	achieve_flag = true
+	-- end
 
 	ret:AddDamage(damage)
 	
@@ -136,7 +136,7 @@ end
 
 nard_frostHammer_A = nard_frostHammer:new{
 	--Limited = 2,
-	UpgradeDescription = "This attack will freeze Grid Buildings.", --"Freeze the building.",
+	UpgradeDescription = "This adjacent attack will freeze Grid Buildings.", --"Freeze the building.",
 	BuildingFreeze = 1, 
 
 	TipImage = {
