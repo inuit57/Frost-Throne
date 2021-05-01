@@ -12,11 +12,11 @@ local wt2 = {
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
 
 	-- rework 
-	nard_frostHammer_Upgrade1 = "+Building Freeze",
+	nard_frostHammer_Upgrade1 = "Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
-	narD_SidePushShot_Upgrade1 = "IceBreak" ,
-	narD_SidePushShot_Upgrade2 = "+Building Freeze" ,
+	narD_SidePushShot_Upgrade1 = "Unstable shot" ,
+	narD_SidePushShot_Upgrade2 = "IceBreak" ,--"Building Freeze" ,
 
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
@@ -33,7 +33,7 @@ nard_frostHammer = Skill:new{
 	Class = "Prime",
 	Icon = "weapons/frost_warhammer.png", 
 	PathSize = 1,
-	MinDamage =1,
+	MinDamage =0,
 	Damage = 2,
 	PowerCost = 1,
 	Upgrades = 2,
@@ -75,6 +75,19 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 		achieve_flag = true
 	end
 	damage.sAnimation = "explosmash_"..direction
+	
+	if not Board:IsTerrain(p2,TERRAIN_ICE) and not Board:IsBuilding(p2) then 
+		damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
+		
+		if self.MinDamage > 0 then				
+			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+		end
+
+		if Board:IsFire(p2) then
+			damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+		end
+	end
+
 	ret:AddDamage(damage)
 	
 	ret:AddDelay(0.1)
@@ -136,7 +149,7 @@ nard_frostHammer_A = nard_frostHammer:new{
 }
 
 nard_frostHammer_B = nard_frostHammer:new{
-	UpgradeDescription = "Increases damage by 2.",
+	UpgradeDescription = "Increases damage by 2.and Minimum damage by 1",
 	MinDamage = 1,
 	Damage = 4,
 }
@@ -164,6 +177,7 @@ narD_SidePushShot = TankDefault:new{
 	BuildingFreeze = 0, 
 	--Limited = 1,
 	IceBreak = 0, 
+	Unstable = 0,
 	BuildingFreeze = 0 , 
 	--ProjectileArt = "effects/shot_phaseshot", 
 	ProjectileArt = "effects/shot_frostShot", 
@@ -184,6 +198,7 @@ narD_SidePushShot = TankDefault:new{
 function narD_SidePushShot:GetSkillEffect(p1,p2)
 	local ret = SkillEffect()
 	local dir = GetDirection(p2 - p1)
+	local dir2 = GetDirection(p1 - p2)
 	
 	local target = GetProjectileEnd(p1,p2,pathing)  
 	local distance = p1:Manhattan(target) 
@@ -196,8 +211,6 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	-- 	end
 	-- 	ret:AddDamage(dmg)
 	-- end
-	
-	local damage = SpaceDamage(target, self.Damage )
 
 	local damage = SpaceDamage(target, self.Damage)
 	if self.Push == 1 then
@@ -219,6 +232,9 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
 		local curr = p1 + DIR_VECTORS[dir]*i
 		local damage = SpaceDamage( curr , 0 )  
+		if not Board:IsBuilding(curr) then
+			damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
+		end
 
 		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
 			damage.iTerrain = TERRAIN_ICE
@@ -233,8 +249,14 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 		ret:AddDamage(damage)
 
-		if i ~=distance then
+		if i ~=distance and self.IceBreak > 0 then
 			damage = SpaceDamage(curr , self.IceBreak) 
+			if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
+				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+				if Board:IsFire(curr) then
+					damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+				end
+			end
 			ret:AddDamage(damage)
 		end
 		
@@ -245,10 +267,15 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		damage.sAnimation = "gaia_zeta_iceblast_"..(dir-1)%4 -- exploout0_
 		ret:AddDamage(damage)
 
-
-
-
 	end
+
+	if self.Unstable == 1 then
+		damage = SpaceDamage(target, 0, dir)
+		ret:AddDamage(damage)
+		damage = SpaceDamage(p1, 0, dir2)
+		ret:AddDamage(damage)
+	end
+
 
 	local count = 0 
 	for i = 0, 7 do
@@ -264,28 +291,31 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddScript("narD_frost_Chievo('narD_frost_WIC')")
 	end
 
+	
 
 	return ret
 	
 end
 
-narD_SidePushShot_A = narD_SidePushShot:new{
+narD_SidePushShot_B = narD_SidePushShot:new{
 	--Limited = 2,
 	UpgradeDescription = "Instead ice tile, create broken ice tile." , 
 	IceBreak = 1, 
 	
 }
 
-narD_SidePushShot_B = narD_SidePushShot:new{
-	UpgradeDescription = "This attack will freeze Grid Buildings.",
+narD_SidePushShot_A = narD_SidePushShot:new{
+	UpgradeDescription = "Pushing shooter and target in opposite directions.",--"This attack will freeze Grid Buildings.",
 	--Damage = 2, 
-	BuildingFreeze = 1, 
+	--BuildingFreeze = 1, 
+	Unstable = 1, 
 }
 
 narD_SidePushShot_AB = narD_SidePushShot:new{
 	--Damage = 2, 
 	IceBreak  = 1, 
-	BuildingFreeze = 1, 
+	Unstable = 1,
+	--BuildingFreeze = 1, 
 }
 
 ---rework end 
@@ -640,7 +670,7 @@ nard_DragonFire = Skill:new{
 	LaunchSound = "/weapons/enhanced_tractor",----"/weapons/bomb_strafe",
 	BombSound = "/impact/generic/tractor_beam",--"/impact/generic/explosion",
 
-	CustomTipImage = "MyWeaponTip",
+	--CustomTipImage = "MyWeaponTip",
 
 	TipImage = {
 		Unit = Point(2,4),
@@ -737,6 +767,12 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 			ret:AddDelay(self.AnimDelay) --was 0.2
 		end
 		
+		if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
+			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			if Board:IsFire(curr) then
+				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+			end
+		end
 		ret:AddDamage(damage)
 		ret:AddBounce(curr,3)
 		
@@ -787,7 +823,7 @@ nard_DragonFire_A = nard_DragonFire:new{
 	-- Range = 5 , --7, 
 	--AttackAnimation = "ExploRaining2",
 
-	CustomTipImage = "MyWeaponTip",
+	--CustomTipImage = "MyWeaponTip",
 
 }
 

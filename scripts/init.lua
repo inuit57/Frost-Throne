@@ -86,13 +86,42 @@ local function init(self)
 	modApi:appendAsset("img/effects/gaia_zeta_iceblast_L.png",self.resourcePath.."img/effects/gaia_zeta_iceblast_L.png")
 
 
+	modApi:appendAsset("img/combat/icons/narD_icon_ice_glow.png",self.resourcePath.."img/combat/icons/narD_icon_ice_glow.png")
+		Location["combat/icons/narD_icon_ice_glow.png"] = Point(-13,10)
+	modApi:appendAsset("img/combat/icons/narD_icon_ice_glowU.png",self.resourcePath.."img/combat/icons/narD_icon_ice_glow.png")
+		Location["combat/icons/narD_icon_ice_glowU.png"] = Point(-28,10)
+
+	modApi:appendAsset("img/combat/icons/narD_icon_icecrack_glow.png",self.resourcePath.."img/combat/icons/narD_icon_icecrack_glow.png")
+		Location["combat/icons/narD_icon_icecrack_glow.png"] = Point(-13,10)
+	modApi:appendAsset("img/combat/icons/narD_icon_icecrack_glowU.png",self.resourcePath.."img/combat/icons/narD_icon_icecrack_glow.png")
+		Location["combat/icons/narD_icon_icecrack_glowU.png"] = Point(-28,10)
+
+
+
+	modApi:appendAsset("img/combat/icons/tosx_create_water_icon_glow.png",self.resourcePath.."img/combat/icons/tosx_create_water_icon_glow.png")
+		Location["combat/icons/tosx_create_water_icon_glow.png"] = Point(-13,10)
+	modApi:appendAsset("img/combat/icons/tosx_create_water_icon_glowU.png",self.resourcePath.."img/combat/icons/tosx_create_water_icon_glow.png")
+		Location["combat/icons/tosx_create_water_icon_glowU.png"] = Point(-28,10)
+	modApi:copyAsset("img/combat/icons/icon_water_immune_glow.png", "img/combat/icons/tosx_create_water_icon_glowX.png")
+		Location["combat/icons/tosx_create_water_icon_glowX.png"] = Point(-13,10)
+
 
 	require(self.scriptPath .."achievements/init")
 	require(self.scriptPath .."achievements")
 	require(self.scriptPath .."achievementTriggers"):init()
 	local achvApi = require(self.scriptPath.."/achievements/api")
 
-
+	if modApiExt then
+        -- modApiExt already defined. This means that the user has the complete
+        -- ModUtils package installed. Use that instead of loading our own one.
+        narD_frostsquad_ModApiExt = modApiExt
+    else
+        -- modApiExt was not found. Load our inbuilt version
+        local extDir = self.scriptPath.."modApiExt/"
+        narD_frostsquad_ModApiExt = require(extDir.."modApiExt")
+        narD_frostsquad_ModApiExt:init(extDir)
+	end
+	
 	local shop = require(self.scriptPath .."shop")
 	shop:addWeapon({
 		id = "nard_frostHammer",
@@ -119,7 +148,7 @@ end
 local function load(self,options,version)
 
 	--assert(package.loadlib(self.resourcePath .."/lib/utils.dll", "luaopen_utils"))()
-	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne"," ",self.resourcePath.."/squad_icon.png")
+	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Warriors of the frozen wastes, Rise",self.resourcePath.."/squad_icon.png")
 	require(self.scriptPath .."shop"):load(options)
 
 
@@ -135,5 +164,5 @@ return {
 	init = init,
     icon = "mod_icon.png",
 	load = load,
-	description = "" 
+	description = "Freeze tiles and crush enemies. (Tip : Fire + Ice = water)"  
 }
