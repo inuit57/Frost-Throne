@@ -5,7 +5,7 @@ local wt2 = {
 	nard_Iceball_Upgrade1 = "+1 Min Damage",--"Building Immune", --"+2 Center Damage",
 	nard_Iceball_Upgrade2 = "+1 Max Damage",
 	
-	nard_DragonFire_Upgrade1 = "Gain Shield" ,--"+2 Range", --"+4 Range"
+	nard_DragonFire_Upgrade1 = "+ 1 Range",--"Gain Shield" ,--"+2 Range", --"+4 Range"
 	nard_DragonFire_Upgrade2 = "+1 Damage", --"+2 Range", --"Side Push",
 	
 	nard_PhaseShield_Upgrade1 = "Shield Allies",
@@ -235,10 +235,12 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
 		local curr = p1 + DIR_VECTORS[dir]*i
 		local damage = SpaceDamage( curr , 0 )  
+		local makeIce = 0 
 		
 		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
 			damage.iTerrain = TERRAIN_ICE
 			damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
+			makeIce  = 1
 			if Board:IsFire(curr) then
 				damage.iTerrain = TERRAIN_WATER
 				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
@@ -251,16 +253,15 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 		ret:AddDamage(damage)
 
-		if i ~=distance and self.IceBreak > 0 then
-			damage = SpaceDamage(curr , self.IceBreak) 
-			if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
-				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
-				if Board:IsFire(curr) then
-					damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
-				end
+		if i ~=distance and self.IceBreak > 0 and makeIce == 1  then
+			damage = SpaceDamage(curr , self.IceBreak) 		
+			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			if Board:IsFire(curr) then
+				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
 			end
 			ret:AddDamage(damage)
 		end
+		makeIce = 0 
 		
 		damage = SpaceDamage(p1 + DIR_VECTORS[dir]*i + DIR_VECTORS[(dir+1)%4], 0, (dir+1)%4)
 		damage.sAnimation = "gaia_zeta_iceblast_"..(dir+1)%4
@@ -273,7 +274,9 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	if self.Unstable == 1 then
 		damage = SpaceDamage(target, 0, dir)
-		damage.sImageMark = "combat/icons/narD_icon_ice_glowU.png"
+		if not Board:IsTerrain(target,TERRAIN_LAVA) and Board:GetTerrain(target) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(target) and not Board:IsPod(target) and not Board:IsSpawning(target) and Board:GetTerrain(target) ~= TERRAIN_ICE then	
+			damage.sImageMark = "combat/icons/narD_icon_ice_glowU.png"
+		end
 		ret:AddDamage(damage)
 	end
 
@@ -655,7 +658,7 @@ nard_DragonFire = Skill:new{
 	AttackAnimation = "ExploRepulse3",--"ExploRaining1",
 	Sound = "/general/combat/stun_explode",
 	MinMove = 2,
-	Range = 3, --2,  2 : 1칸, 3: 2칸... n : n-1 칸 
+	Range = 2,--3,    -- n : n-1 칸 
 	Damage = 1,--0,
 	Damage2 = 0,
 	AnimDelay = 0.2,
@@ -676,9 +679,9 @@ nard_DragonFire = Skill:new{
 	TipImage = {
 		Unit = Point(2,4),
 		Enemy = Point(2,3),
-		Enemy2 = Point(2,2),
+		--Enemy2 = Point(2,2),
 		Enemy3 = Point(3,3),
-		Target = Point(2,1),
+		Target = Point(2,2),--Point(2,1),
 		CustomEnemy = "Firefly2", --"Scorpion2",
 		Building = Point(4,2),
 		Length = 4,
@@ -741,6 +744,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		
 		local damage = SpaceDamage(curr, self.Damage , DIR_FLIP)
 		
+		local makeIce = 0 
 		-- if (curr == p1) or (curr == p2) then
 		-- 	damage = SpaceDamage(curr, self.Damage)
 		-- end
@@ -751,7 +755,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 		local spaceDamage3 = SpaceDamage(curr, 0) 
 		
 		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then
-
+			makeIce = 1
 			spaceDamage3.iTerrain = TERRAIN_ICE
 			if Board:IsFire(curr) then
 				spaceDamage3.iTerrain = TERRAIN_WATER
@@ -768,7 +772,7 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 			ret:AddDelay(self.AnimDelay) --was 0.2
 		end
 		
-		if not Board:IsTerrain(curr,TERRAIN_ICE)  then				
+		if makeIce == 1  then				
 			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
 			if Board:IsFire(curr) then
 				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
@@ -819,12 +823,22 @@ function nard_DragonFire:GetSkillEffect(p1, p2)
 end
 
 nard_DragonFire_A = nard_DragonFire:new{
-	UpgradeDescription = "Gain Shield",
-	Shield = 1, 
-	-- Range = 5 , --7, 
-	--AttackAnimation = "ExploRaining2",
+	UpgradeDescription = "Increase range by 1",--"Gain Shield",
+	--Shield = 1, 
+	Range = 3 ,
 
-	--CustomTipImage = "MyWeaponTip",
+	TipImage = {
+		Unit = Point(2,4),
+		Enemy = Point(2,3),
+		Enemy2 = Point(2,2),
+		Enemy3 = Point(3,3),
+		Target = Point(2,1),
+		CustomEnemy = "Firefly2", --"Scorpion2",
+		Building = Point(4,2),
+		Length = 4,
+			
+	}
+
 
 }
 
@@ -832,36 +846,16 @@ nard_DragonFire_B = nard_DragonFire:new{
 	--UpgradeDescription = "Push tiles on either side when jumping.",
 	UpgradeDescription = "Increase damage by 1" , --"Allows jumping over any number of additional targets.",
 	Damage = 2, 
-	--SidePush = 1, 
-	-- Range = 5 , 
-	-- TipImage = {
-	-- 	Unit = Point(2,3),
-	-- 	Enemy = Point(1,2),
-	-- 	Enemy2 = Point(3,2),
-	-- 	Enemy3 = Point(3,3),
-	-- 	Enemy4 = Point(1,0),
-	-- 	Target = Point(2,0)
-	-- }
+	
 }
 
 nard_DragonFire_AB = nard_DragonFire:new{
 
 	Damage = 2, 
-	-- Range = 7 ,  -- 
-	--SidePush = 1 ,
-	Shield = 1, 
-	CustomTipImage = "MyWeaponTip",
-	-- TipImage = {
-	-- 	Unit = Point(2,3),
-	-- 	Enemy = Point(2,2),
-	-- 	Enemy2 = Point(3,2),
-	-- 	Enemy3 = Point(3,3),
-	-- 	Enemy4 = Point(1,0),
-	-- 	Target = Point(2,0),
-
-	-- 	CustomEnemy = "Scorpion2",
-	-- }
-
+	Range = 3 ,  -- 
+	
+	--Shield = 1, 
+	
 }
 
 
