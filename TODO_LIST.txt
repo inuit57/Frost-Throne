@@ -1,7 +1,0 @@
-<Others>
-* Achievement? 
-* Squad Description 
-
-<Weapon>
-
-<Image>
