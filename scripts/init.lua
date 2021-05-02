@@ -86,6 +86,12 @@ local function init(self)
 	modApi:appendAsset("img/effects/gaia_zeta_iceblast_L.png",self.resourcePath.."img/effects/gaia_zeta_iceblast_L.png")
 
 
+	
+	modApi:appendAsset("img/effects/ice_smash_R.png",self.resourcePath.."img/effects/ice_smash_R.png")
+	modApi:appendAsset("img/effects/ice_smash_U.png",self.resourcePath.."img/effects/ice_smash_U.png")
+	modApi:appendAsset("img/effects/ice_smash_L.png",self.resourcePath.."img/effects/ice_smash_L.png")
+	modApi:appendAsset("img/effects/ice_smash_D.png",self.resourcePath.."img/effects/ice_smash_D.png")
+
 	modApi:appendAsset("img/combat/icons/narD_icon_ice_glow.png",self.resourcePath.."img/combat/icons/narD_icon_ice_glow.png")
 		Location["combat/icons/narD_icon_ice_glow.png"] = Point(-13,10)
 	modApi:appendAsset("img/combat/icons/narD_icon_ice_glowU.png",self.resourcePath.."img/combat/icons/narD_icon_ice_glow.png")
@@ -102,8 +108,6 @@ local function init(self)
 		Location["combat/icons/tosx_create_water_icon_glow.png"] = Point(-13,10)
 	modApi:appendAsset("img/combat/icons/tosx_create_water_icon_glowU.png",self.resourcePath.."img/combat/icons/tosx_create_water_icon_glow.png")
 		Location["combat/icons/tosx_create_water_icon_glowU.png"] = Point(-28,10)
-	modApi:copyAsset("img/combat/icons/icon_water_immune_glow.png", "img/combat/icons/tosx_create_water_icon_glowX.png")
-		Location["combat/icons/tosx_create_water_icon_glowX.png"] = Point(-13,10)
 
 
 	require(self.scriptPath .."achievements/init")

@@ -76,7 +76,8 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 		damage.iFrozen = 1 
 		achieve_flag = true
 	end
-	damage.sAnimation = "explosmash_"..direction
+	damage.sAnimation = "ice_smash_"..direction
+	--"explosmash_"..direction
 	
 	--if not Board:IsTerrain(p2,TERRAIN_ICE) and not Board:IsBuilding(p2) then 
 	if makeIce == 1 then
