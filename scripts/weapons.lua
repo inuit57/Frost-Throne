@@ -60,7 +60,9 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	
 
 
+	local makeIce = 0 
 	if not Board:IsTerrain(p2,TERRAIN_LAVA) and Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2) and Board:GetTerrain(p2) ~= TERRAIN_ICE then	
+		makeIce = 1
 		damage.iTerrain = TERRAIN_ICE
 		if Board:IsFire(p2) then
 			damage.iTerrain = TERRAIN_WATER
@@ -76,7 +78,8 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	end
 	damage.sAnimation = "explosmash_"..direction
 	
-	if not Board:IsTerrain(p2,TERRAIN_ICE) and not Board:IsBuilding(p2) then 
+	--if not Board:IsTerrain(p2,TERRAIN_ICE) and not Board:IsBuilding(p2) then 
+	if makeIce == 1 then
 		damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
 		
 		if self.MinDamage > 0 then				
@@ -84,7 +87,7 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 		end
 
 		if Board:IsFire(p2) then
-			damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+			damage.sImageMark = "combat/icons/tosx_create_water_icon_glow.png"
 		end
 	end
 
@@ -243,7 +246,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 			makeIce  = 1
 			if Board:IsFire(curr) then
 				damage.iTerrain = TERRAIN_WATER
-				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
+				damage.sImageMark = "combat/icons/tosx_create_water_icon_glow.png"
 			end
 		end
 		
