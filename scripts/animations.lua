@@ -53,6 +53,30 @@ ANIMS.gaia_zeta_iceblast_3 = ANIMS.gaia_zeta_iceblast_0:new{
 	PosY = -4
 }
 
+
+ANIMS.ice_smash_0 = Animation:new{
+	Image = "effects/ice_smash_U.png",
+	NumFrames = 13,
+	Time = 0.07,
+	PosX = -35,
+	PosY = -11
+}
+ANIMS.ice_smash_1 = ANIMS.ice_smash_0:new{
+	Image = "effects/ice_smash_R.png",
+	PosX = -24,
+	PosY = -18
+}
+ANIMS.ice_smash_2 = ANIMS.ice_smash_0:new{
+	Image = "effects/ice_smash_D.png",
+	PosX = -22,
+	PosY = -18
+}
+ANIMS.ice_smash_3 = ANIMS.ice_smash_0:new{
+	Image = "effects/ice_smash_L.png",
+	PosX = -22,
+	PosY = -10
+}
+
 --[[
 ANIMS.AmmoDrop1 = Animation:new{
 	Image = "effects/misc_ammo1.png",
