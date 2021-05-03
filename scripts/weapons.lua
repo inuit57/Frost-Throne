@@ -15,7 +15,7 @@ local wt2 = {
 	nard_frostHammer_Upgrade1 = "Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
-	narD_SidePushShot_Upgrade1 = "Unstable shot" ,
+	narD_SidePushShot_Upgrade1 = "Range scaling", --"Unstable shot" ,
 	narD_SidePushShot_Upgrade2 = "IceBreak" ,--"Building Freeze" ,
 
 }
@@ -205,6 +205,10 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	local dir2 = GetDirection(p1 - p2)
 	
 	local target = GetProjectileEnd(p1,p2,pathing)  
+	if self.Zeroing then
+		target = p2 
+	end 
+
 	local distance = p1:Manhattan(target) 
 
 	-- if distance == 1 and (Board:IsTerrain(target,TERRAIN_FOREST) or Board:IsTerrain(target,TERRAIN_SAND)) then
@@ -257,9 +261,11 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 		ret:AddDamage(damage)
 
-		if i ~=distance and self.IceBreak > 0 and makeIce == 1  then
+		if i ~=distance and self.IceBreak > 0 and not Board:IsPod(curr) then
 			damage = SpaceDamage(curr , self.IceBreak) 		
-			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			if not Board:IsTerrain(curr,TERRAIN_ICE) and not Board:IsTerrain(curr,TERRAIN_LAVA) and not Board:IsSpawning(curr)  then
+				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			end
 			if Board:IsFire(curr) then
 				damage.sImageMark = "combat/icons/tosx_create_water_icon_glowU.png"
 			end
@@ -276,13 +282,13 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	end
 
-	if self.Unstable == 1 then
-		damage = SpaceDamage(target, 0, dir)
-		if not Board:IsTerrain(target,TERRAIN_LAVA) and Board:GetTerrain(target) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(target) and not Board:IsPod(target) and not Board:IsSpawning(target) and Board:GetTerrain(target) ~= TERRAIN_ICE then	
-			damage.sImageMark = "combat/icons/narD_icon_ice_glowU.png"
-		end
-		ret:AddDamage(damage)
-	end
+	-- if self.Unstable == 1 then
+	-- 	damage = SpaceDamage(target, 0, dir)
+	-- 	if not Board:IsTerrain(target,TERRAIN_LAVA) and Board:GetTerrain(target) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(target) and not Board:IsPod(target) and not Board:IsSpawning(target) and Board:GetTerrain(target) ~= TERRAIN_ICE then	
+	-- 		damage.sImageMark = "combat/icons/narD_icon_ice_glowU.png"
+	-- 	end
+	-- 	ret:AddDamage(damage)
+	-- end
 
 
 	local count = 0 
@@ -313,16 +319,30 @@ narD_SidePushShot_B = narD_SidePushShot:new{
 }
 
 narD_SidePushShot_A = narD_SidePushShot:new{
-	UpgradeDescription = "Pushing shooter and target in opposite directions.",--"This attack will freeze Grid Buildings.",
-	--Damage = 2, 
+	UpgradeDescription = "Range scaling", 
+	--"Pushing shooter and target in opposite directions.",--"This attack will freeze Grid Buildings.",
+
 	--BuildingFreeze = 1, 
-	Unstable = 1, 
+	--Unstable = 1, 
+	Zeroing = 1,
+
+	TipImage = {
+		Unit = Point(2,4),
+		--Enemy = Point(2,2),
+		Enemy2 = Point(3,2),
+		Enemy3 = Point(3,3),
+		Enemy4 = Point(3,0),
+		Target = Point(2,2),
+
+		Building = Point (2,0), 
+	}
 }
 
 narD_SidePushShot_AB = narD_SidePushShot:new{
 	--Damage = 2, 
 	IceBreak  = 1, 
-	Unstable = 1,
+	--Unstable = 1,
+	Zeroing = 1, 
 	--BuildingFreeze = 1, 
 }
 
