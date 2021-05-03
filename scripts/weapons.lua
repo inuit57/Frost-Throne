@@ -15,8 +15,8 @@ local wt2 = {
 	nard_frostHammer_Upgrade1 = "Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
-	narD_SidePushShot_Upgrade1 = "Range scaling", --"Unstable shot" ,
-	narD_SidePushShot_Upgrade2 = "IceBreak" ,--"Building Freeze" ,
+	--narD_SidePushShot_Upgrade1 = "Range scaling", --"Unstable shot" ,
+	narD_SidePushShot_Upgrade1 = "IceBreak" ,--"Building Freeze" ,
 
 }
 for k,v in pairs(wt2) do Weapon_Texts[k] = v end
