@@ -176,8 +176,8 @@ narD_SidePushShot = TankDefault:new{
 	PowerCost = 1,
 	--Phase = true,
 	Push = 0,--1,
-	Upgrades = 2,
-	UpgradeCost = { 2, 2 },
+	Upgrades = 1, --2,
+	UpgradeCost = {2} ,-- 2 },
 	BuildingFreeze = 0, 
 	--Limited = 1,
 	IceBreak = 0, 
@@ -205,9 +205,9 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	local dir2 = GetDirection(p1 - p2)
 	
 	local target = GetProjectileEnd(p1,p2,pathing)  
-	if self.Zeroing then
-		target = p2 
-	end 
+	-- if self.Zeroing then
+	-- 	target = p2 
+	-- end 
 
 	local distance = p1:Manhattan(target) 
 
@@ -232,10 +232,10 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
 	
-	if self.Unstable == 1 then
-		damage = SpaceDamage(p1, 0, dir2)
-		ret:AddDamage(damage)
-	end
+	-- if self.Unstable == 1 then
+	-- 	damage = SpaceDamage(p1, 0, dir2)
+	-- 	ret:AddDamage(damage)
+	-- end
 
 
 	for i = 1, distance  do
@@ -311,40 +311,41 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	
 end
 
-narD_SidePushShot_B = narD_SidePushShot:new{
+narD_SidePushShot_A = narD_SidePushShot:new{
+--narD_SidePushShot_B = narD_SidePushShot:new{
 	--Limited = 2,
 	UpgradeDescription = "Instead ice tile, create broken ice tile." , 
 	IceBreak = 1, 
 	
 }
 
-narD_SidePushShot_A = narD_SidePushShot:new{
-	UpgradeDescription = "Range scaling", 
-	--"Pushing shooter and target in opposite directions.",--"This attack will freeze Grid Buildings.",
+-- narD_SidePushShot_A = narD_SidePushShot:new{
+-- 	UpgradeDescription = "Range scaling", 
+-- 	--"Pushing shooter and target in opposite directions.",--"This attack will freeze Grid Buildings.",
 
-	--BuildingFreeze = 1, 
-	--Unstable = 1, 
-	Zeroing = 1,
+-- 	--BuildingFreeze = 1, 
+-- 	--Unstable = 1, 
+-- 	Zeroing = 1,
 
-	TipImage = {
-		Unit = Point(2,4),
-		--Enemy = Point(2,2),
-		Enemy2 = Point(3,2),
-		Enemy3 = Point(3,3),
-		Enemy4 = Point(3,0),
-		Target = Point(2,2),
+-- 	TipImage = {
+-- 		Unit = Point(2,4),
+-- 		--Enemy = Point(2,2),
+-- 		Enemy2 = Point(3,2),
+-- 		Enemy3 = Point(3,3),
+-- 		Enemy4 = Point(3,0),
+-- 		Target = Point(2,2),
 
-		Building = Point (2,0), 
-	}
-}
+-- 		Building = Point (2,0), 
+-- 	}
+-- }
 
-narD_SidePushShot_AB = narD_SidePushShot:new{
-	--Damage = 2, 
-	IceBreak  = 1, 
-	--Unstable = 1,
-	Zeroing = 1, 
-	--BuildingFreeze = 1, 
-}
+-- narD_SidePushShot_AB = narD_SidePushShot:new{
+-- 	--Damage = 2, 
+-- 	IceBreak  = 1, 
+-- 	--Unstable = 1,
+-- 	Zeroing = 1, 
+-- 	--BuildingFreeze = 1, 
+-- }
 
 ---rework end 
 
