@@ -79,7 +79,7 @@ achvApi:AddChievo{
 		id = "narD_frost_2clear",
 		name = "Frost Throne 2 Island Victory",
 		tip = "Complete 2 corporate islands then win the game.\n\nEasy: $easy\nNormal: $normal\nHard: $hard",
-		img = "img/achievements/narD_acid_ach_2clear.png",
+		img = "img/achievements/narD_frost_ach_2clear.png",
 		objective = {
 			easy = true,
 			normal = true,
@@ -91,7 +91,7 @@ achvApi:AddChievo{
 		id = "narD_frost_3clear",
 		name = "Frost Throne 3 Island Victory",
 		tip = "Complete 3 corporate islands then win the game.\n\nEasy: $easy\nNormal: $normal\nHard: $hard",
-		img = "img/achievements/narD_acid_ach_3clear.png",
+		img = "img/achievements/narD_frost_ach_3clear.png",
 		objective = {
 			easy = true,
 			normal = true,
@@ -103,7 +103,7 @@ achvApi:AddChievo{
 		id = "narD_frost_4clear",
 		name = "Frost Throne 4 Island Victory",
 		tip = "Complete 4 corporate islands then win the game.\n\nEasy: $easy\nNormal: $normal\nHard: $hard",
-		img = "img/achievements/narD_acid_ach_4clear.png",
+		img = "img/achievements/narD_frost_ach_4clear.png",
 		objective = {
 			easy = true,
 			normal = true,
@@ -115,7 +115,7 @@ achvApi:AddChievo{
 		id = "narD_frost_perfect",
 		name = "Frost Throne Perfect",
 		tip = "Win the game and obtain the highest possible score.",
-		img = "img/achievements/narD_acid_ach_perfect.png"
+		img = "img/achievements/narD_frost_ach_perfect.png"
 }
 
 -- function tosx_windUnlock()
