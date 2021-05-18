@@ -16,7 +16,6 @@ local function init(self)
 		-- 	BodyColor =			{30, 35, 34},	--metal mid
 		-- 	PlateShadow =		{15, 17, 17},	--metal dark
 		-- }, 
-		-- 색감은 아직도 잘 모르겠다. 
 
 		{
 			Type = "mech",
@@ -152,7 +151,7 @@ end
 local function load(self,options,version)
 
 	--assert(package.loadlib(self.resourcePath .."/lib/utils.dll", "luaopen_utils"))()
-	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Warriors of the frozen wastes, Rise",self.resourcePath.."/squad_icon.png")
+	modApi:addSquadTrue({"Frost Throne","narD_FrostMech","narD_IcicleMech","narD_DrakoMech"},"Frost Throne","Warriors of the frozen wastes, Rise!",self.resourcePath.."/squad_icon.png")
 	require(self.scriptPath .."shop"):load(options)
 
 
@@ -163,7 +162,7 @@ end
 return {
 	id = "Frost Throne", 
 	name = "Frost Throne", 
-	version = "2.0.5", 
+	version = "2.0.6", 
 	requirements = {},
 	init = init,
     icon = "mod_icon.png",
