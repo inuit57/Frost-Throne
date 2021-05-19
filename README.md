@@ -5,5 +5,6 @@ into the breach mod squad,
 Make ice tile! 
 
 >Specail Tahnks to
-  * tosx : Weapons Effect & Texts Help. 
-  * 오예예 : Mech Sprites Help. 
+  * Weapons Effect : tosx 
+  * Mech Sprites : 오예예
+  * Playtest : tosx, Lemonymous , Laurent Sonny ,Sworder
