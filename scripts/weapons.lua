@@ -12,7 +12,7 @@ local wt2 = {
 	nard_PhaseShield_Upgrade2 = "+2 Range", --"Full Phase",
 
 	-- rework 
-	nard_frostHammer_Upgrade1 = "Building Freeze",
+	nard_frostHammer_Upgrade1 = "IceBreak",--"Building Freeze",
 	nard_frostHammer_Upgrade2 = "+2 Damage",
 
 	--narD_SidePushShot_Upgrade1 = "Range scaling", --"Unstable shot" ,
@@ -39,6 +39,7 @@ nard_frostHammer = Skill:new{
 	Upgrades = 2,
 	UpgradeCost = { 2,3 },
 	BuildingFreeze = 0, 
+	IceBreak = 0 ,
 	--Limited = 1,
 	LaunchSound = "/weapons/mercury_fist",
 	TipImage = {
@@ -70,10 +71,12 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	end
 	ret:AddDamage(damage)
 
-	damage = SpaceDamage(p2, 0) --self.MinDamage) --  self.Damage)
-	if Board:IsBuilding(p2) and self.BuildingFreeze == 1 then 
-		damage.iDamage = 0
-		damage.iFrozen = 1 
+	damage = SpaceDamage(p2, 0)
+
+
+	if Board:IsBuilding(p2) then --and self.BuildingFreeze == 1 then 
+		-- damage.iDamage = 0
+		-- damage.iFrozen = 1 
 		achieve_flag = true
 	end
 	damage.sAnimation = "ice_smash_"..direction
@@ -83,8 +86,9 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 	if makeIce == 1 then
 		damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
 		
-		if self.MinDamage > 0 then				
+		if self.IceBreak == 1 then				
 			damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
+			damage.iDamage = 1
 		end
 
 		if Board:IsFire(p2) then
@@ -140,15 +144,19 @@ end
 
 nard_frostHammer_A = nard_frostHammer:new{
 	--Limited = 2,
-	UpgradeDescription = "This adjacent attack will freeze Grid Buildings.", --"Freeze the building.",
-	BuildingFreeze = 1, 
+	--UpgradeDescription = "This adjacent attack will freeze Grid Buildings.", --"Freeze the building.",
+	UpgradeDescription = "Instead ice tile, create broken ice tile.", 
+	--BuildingFreeze = 1, 
 
-	TipImage = {
-		Unit = Point(2,3),
-		Building = Point(2,2),
-		Enemy = Point(2,1),
-		Target = Point(2,2)
-	}
+	IceBreak = 1,
+	--MinDamage = 1,
+
+	-- TipImage = {
+	-- 	Unit = Point(2,3),
+	-- 	Building = Point(2,2),
+	-- 	Enemy = Point(2,1),
+	-- 	Target = Point(2,2)
+	-- }
 
 }
 
@@ -159,7 +167,8 @@ nard_frostHammer_B = nard_frostHammer:new{
 }
 
 nard_frostHammer_AB = nard_frostHammer_A:new{
-	BuildingFreeze = 1, 
+	--BuildingFreeze = 1, 
+	IceBreak = 1,
 	--MinDamage = 1,
 	Damage = 4,
 	
@@ -205,39 +214,18 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 	local dir2 = GetDirection(p1 - p2)
 	
 	local target = GetProjectileEnd(p1,p2,pathing)  
-	-- if self.Zeroing then
-	-- 	target = p2 
-	-- end 
-
+	
 	local distance = p1:Manhattan(target) 
 
-	-- if distance == 1 and (Board:IsTerrain(target,TERRAIN_FOREST) or Board:IsTerrain(target,TERRAIN_SAND)) then
-	-- 	local dmg = SpaceDamage(target, 0) 
-	-- 	dmg.iTerrain = TERRAIN_ICE 
-	-- 	if Board:IsFire(target) then
-	-- 		dmg.iTerrain = TERRAIN_WATER
-	-- 	end
-	-- 	ret:AddDamage(dmg)
-	-- end
-
+	
 	local damage = SpaceDamage(target, self.Damage)
 	if self.Push == 1 then
 		damage = SpaceDamage(target, self.Damage, dir)
 	end
-	-- damage.sAnimation = "gaia_zeta_iceblast_"..dir
-	if Board:IsBuilding(target) and self.BuildingFreeze == 1 then 
-		--damage.iDamage = 0 
-		damage.iFrozen = 1
-	end
-
-	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)--"effects/shot_mechtank")
 	
-	-- if self.Unstable == 1 then
-	-- 	damage = SpaceDamage(p1, 0, dir2)
-	-- 	ret:AddDamage(damage)
-	-- end
 
-
+	ret:AddProjectile(damage, self.ProjectileArt, NO_DELAY)
+	
 	for i = 1, distance  do
 		ret:AddDelay(0.06)
 		ret:AddBounce(p1 + DIR_VECTORS[dir]*i, -3)
@@ -261,7 +249,7 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 		ret:AddDamage(damage)
 
-		if i ~=distance and self.IceBreak > 0 and not Board:IsPod(curr) then
+		if self.IceBreak > 0 and not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) then --  i ~=distance and
 			damage = SpaceDamage(curr , self.IceBreak) 		
 			if not Board:IsTerrain(curr,TERRAIN_ICE) and not Board:IsTerrain(curr,TERRAIN_LAVA) and not Board:IsSpawning(curr)  then
 				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
