@@ -50,8 +50,8 @@ achvApi:AddChievo{
 
 achvApi:AddChievo{
 	id = "narD_frost_Slam",
-	name = "Ice Snap",
-	tip = "Freeze 1 Building and kill 1 enemy with a single attack of the Frost Hammer with the Frost Throne squad.",
+	name = "Getting Over it", --"Ice Snap",
+	tip = "Kill enemies beyond the building with a single attack of the Frost Hammer with the Frost Throne squad.",
 	img = "img/achievements/narD_frost_Slam.png",
 }
 
