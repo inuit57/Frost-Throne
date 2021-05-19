@@ -62,11 +62,13 @@ function nard_frostHammer:GetSkillEffect(p1, p2)
 
 
 	local makeIce = 0 
-	if not Board:IsTerrain(p2,TERRAIN_LAVA) and Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2) and Board:GetTerrain(p2) ~= TERRAIN_ICE then	
+	if not Board:IsTerrain(p2,TERRAIN_LAVA) and Board:GetTerrain(p2) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(p2) and not Board:IsPod(p2) and not Board:IsSpawning(p2)  then	
 		makeIce = 1
-		damage.iTerrain = TERRAIN_ICE
-		if Board:IsFire(p2) then
-			damage.iTerrain = TERRAIN_WATER
+		if Board:GetTerrain(p2) ~= TERRAIN_ICE then
+			damage.iTerrain = TERRAIN_ICE
+			if Board:IsFire(p2) then
+				damage.iTerrain = TERRAIN_WATER
+			end
 		end
 	end
 	ret:AddDamage(damage)
@@ -233,13 +235,15 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 		local damage = SpaceDamage( curr , 0 )  
 		local makeIce = 0 
 		
-		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) and Board:GetTerrain(curr) ~= TERRAIN_ICE then	
-			damage.iTerrain = TERRAIN_ICE
-			damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"
+		if not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr)  then	
 			makeIce  = 1
-			if Board:IsFire(curr) then
-				damage.iTerrain = TERRAIN_WATER
-				damage.sImageMark = "combat/icons/tosx_create_water_icon_glow.png"
+			if Board:GetTerrain(curr) ~= TERRAIN_ICE then
+				damage.iTerrain = TERRAIN_ICE
+				damage.sImageMark = "combat/icons/narD_icon_ice_glow.png"				
+				if Board:IsFire(curr) then
+					damage.iTerrain = TERRAIN_WATER
+					damage.sImageMark = "combat/icons/tosx_create_water_icon_glow.png"
+				end
 			end
 		end
 		
@@ -249,7 +253,8 @@ function narD_SidePushShot:GetSkillEffect(p1,p2)
 
 		ret:AddDamage(damage)
 
-		if self.IceBreak > 0 and not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) then --  i ~=distance and
+		--if self.IceBreak > 0 and not Board:IsTerrain(curr,TERRAIN_LAVA) and Board:GetTerrain(curr) ~= TERRAIN_MOUNTAIN and not Board:IsBuilding(curr) and not Board:IsPod(curr) and not Board:IsSpawning(curr) then --  i ~=distance and
+		if self.IceBreak > 0 and makeIce == 1 then
 			damage = SpaceDamage(curr , self.IceBreak) 		
 			if not Board:IsTerrain(curr,TERRAIN_ICE) and not Board:IsTerrain(curr,TERRAIN_LAVA) and not Board:IsSpawning(curr)  then
 				damage.sImageMark = "combat/icons/narD_icon_icecrack_glowU.png"
