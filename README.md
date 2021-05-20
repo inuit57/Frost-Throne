@@ -7,4 +7,4 @@ Make ice tile!
 >Specail Tahnks to
   * Weapons Effect : tosx 
   * Mech Sprites : 오예예
-  * Playtest : tosx, Lemonymous , Laurent Sonny ,Sworder
+  * Playtest : tosx, Lemonymous , Laurent Sonny ,Sworder,greg_murrell
