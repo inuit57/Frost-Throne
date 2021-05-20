@@ -23,5 +23,5 @@ Frost Cannon : Fire a non-damaging projectile that creates ice as it passes and 
 
 >Specail Tahnks to
   * Weapons Effect : tosx 
-  * Mech Sprites : 오예예
+  * Mech Sprites : Owyeayea(오예예)
   * Playtest : tosx, Lemonymous , Laurent Sonny ,Sworder,greg_murrell
